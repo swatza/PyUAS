@@ -11,23 +11,52 @@ sys.path.insert(0, './protobuf')
 import PyPackets_pb2
 
 import PyPacket
+import Subscriber
 
 RECV_BUFF = 8192
 
-def buildNodePacket(data):
+def buildNodePacket(subscribers, PacketCounterNode):
 	pkt_id = PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,10)
 	pkt = PyPacket.PyPacket()
 	pkt.setDataType(PyPacket.PacketDataType.PKT_NODE_HEARTBEAT)
 	pkt.setID(pkt_id.getBytes())
-	pkt.setData(data) #normally insert a data building part
+	#Define the basic components
+	msg = PyPackets_pb2.NodeHeartBeat()
+	msg.packetNum = PacketCounterNode
+	msg.ID = str(pkt.getID())
+	msg.time = time.time()
+	#Add all the subscriber infos
+	c = 0;
+	for n in subscribers:
+		new = msg.sub.add()
+		new.id = str(n.ID)
+		new.datatype = str(n.TYPE)
+		new.port = n.PORT
+		new.address = n.IP
+		c += 1
+	#End loop
+	#serialize the data
+	data_str = msg.SerializeToString()
+	pkt.setData(data_str) #normally insert a data building part
+	pkt.displayPacket()
+	del msg
 	return pkt.getPacket() #return the byte array msg
 	
-def buildGenPacket(data):
+def buildGenPacket(PacketCounterDummy):
 	pkt_id = PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,10)
 	pkt = PyPacket.PyPacket()
 	pkt.setDataType(PyPacket.PacketDataType.PKT_DMY_MSG)
 	pkt.setID(pkt_id.getBytes())
-	pkt.setData(data) #normally insert a data building part
+	msg = PyPackets_pb2.dummy_msg()
+	msg.packetNum = PacketCounterDummy
+	msg.ID = str(pkt.getID())
+	msg.time = time.time()
+	msg.s = 'Dummy Message A'
+	#Serialize the data
+	data_str = msg.SerializeToString()
+	pkt.setData(data_str) #normally insert a data building part
+	pkt.displayPacket()
+	del msg
 	return pkt.getPacket() #return the byte array msg
 
 #SUBSCRIBER
@@ -65,14 +94,19 @@ class WritingThread(threading.Thread):
 	def run(self):
 		node_freq = 5
 		deltaT_node = 999
+		PacketCounterNode = 1;
+		TestSubs = []
+		subt = Subscriber.Subscriber(PyPacket.PacketDataType.PKT_DMY_MSG,PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,11).getBytes(),10000,'localhost')
+		TestSubs.append(subt)
 		#Run loop
 		while not self.Quit:
 			#check to send node info at 1/10 Hz
 			if deltaT_node >= node_freq:
 				#create node message 
-				m = buildNodePacket('Test from Dummy A')
+				m = buildNodePacket(TestSubs,PacketCounterNode)
 				#add to queue
 				msg_que.put(m)
+				PacketCounterNode += 1
 				#update timer
 				tlast_node = time.time()
 				
@@ -101,6 +135,7 @@ class WritingThread(threading.Thread):
 		
 PORT = 10000
 NM_PORT = 16000
+PacketCounterDummy = 1
 IP = 'localhost'
 #Create Out Socket
 s_out = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -120,7 +155,8 @@ wthread.start()
 #RUNTIME
 for c in range(10):
 	#add a message to queue
-	msg_que.put(buildGenPacket('This is a Dummy Msg'))
+	msg_que.put(buildGenPacket(PacketCounterDummy))
+	PacketCounterDummy += 1
 	#count up after sleeping
 	time.sleep(1)
 	c += 1

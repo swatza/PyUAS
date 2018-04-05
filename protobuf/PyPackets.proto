@@ -6,7 +6,10 @@ package PyPacket;
 // Helper Classes
 // --------------
 message dummy_msg{
-	required string s = 1;
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	required string s = 4;
 }
 
 //3 Element Vector
@@ -39,8 +42,6 @@ message NMHeartBeat{
 	required uint32 packetNum = 1;
 	required string ID = 2;
 	required double time = 3;
-	
-	//My Nodes vs Other Nodes?
 	repeated Node nodes = 4;
 }
 
@@ -48,8 +49,6 @@ message NodeHeartBeat{
 	required uint32 packetNum = 1;
 	required string ID = 2;
 	required double time = 3;
-	
-	//My Nodes vs Other Nodes?
 	repeated Subscriber sub = 4;
 }
 
@@ -87,3 +86,35 @@ message SimpleDubinsState{
 // ---------------
 // Sensor Messages
 // ---------------
+
+message SensorLocation{
+	required Vector3 LLA = 1;
+	required Vector3 ENU = 2;
+}
+
+message RFSensorMsg{
+	required float path_loss = 1;
+	required float rss = 2;
+	optional uint32 packetNum = 3;
+}
+
+message RFNode{
+	required string chanID = 1; //channel ID number
+	required float rssi = 2; //RSSI of channel
+	required float pl_msr = 3; //calculated "measured" path loss
+	required float pl_error = 4; //PL error between predicted and measured
+	optional int xgridNum = 5; //x grid number in the prediction field
+	optional int ygridNum = 6; //y grid number in the prediction field
+}
+
+message RF_Data_Msg{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	
+	required Vector3 lla = 4;
+	optional Vector3 attitude = 5;
+	optional double airspeed = 6;
+	
+	repeated RFNode rfNode = 7;
+}

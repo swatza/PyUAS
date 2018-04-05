@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='PyPackets.proto',
   package='PyPacket',
-  serialized_pb=_b('\n\x0fPyPackets.proto\x12\x08PyPacket\"\x16\n\tdummy_msg\x12\t\n\x01s\x18\x01 \x02(\t\"*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\"c\n\x04Node\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61taType\x18\x02 \x02(\t\x12\x10\n\x08\x63ommType\x18\x03 \x02(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\x12\x0c\n\x04port\x18\x05 \x02(\t\x12\x0c\n\x04NMID\x18\x06 \x01(\t\"I\n\nSubscriber\x12\n\n\x02id\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61tatype\x18\x02 \x02(\t\x12\x0c\n\x04port\x18\x03 \x02(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\"Y\n\x0bNMHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1d\n\x05nodes\x18\x04 \x03(\x0b\x32\x0e.PyPacket.Node\"_\n\rNodeHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12!\n\x03sub\x18\x04 \x03(\x0b\x32\x14.PyPacket.Subscriber\"\xe6\x01\n\x0bSixDofState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1e\n\x03NED\x18\x04 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08VEL_Iner\x18\x05 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08\x41TTITUDE\x18\x06 \x02(\x0b\x32\x11.PyPacket.Vector3\x12 \n\x05OMEGA\x18\x07 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\x1e\n\x03LLA\x18\x08 \x01(\x0b\x32\x11.PyPacket.Vector3\"F\n\x17Simple1AKinematicsState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\"@\n\x11SimpleDubinsState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01')
+  serialized_pb=_b('\n\x0fPyPackets.proto\x12\x08PyPacket\"C\n\tdummy_msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\t\n\x01s\x18\x04 \x02(\t\"*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\"c\n\x04Node\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61taType\x18\x02 \x02(\t\x12\x10\n\x08\x63ommType\x18\x03 \x02(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\x12\x0c\n\x04port\x18\x05 \x02(\t\x12\x0c\n\x04NMID\x18\x06 \x01(\t\"I\n\nSubscriber\x12\n\n\x02id\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61tatype\x18\x02 \x02(\t\x12\x0c\n\x04port\x18\x03 \x02(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\"Y\n\x0bNMHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1d\n\x05nodes\x18\x04 \x03(\x0b\x32\x0e.PyPacket.Node\"_\n\rNodeHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12!\n\x03sub\x18\x04 \x03(\x0b\x32\x14.PyPacket.Subscriber\"\xe6\x01\n\x0bSixDofState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1e\n\x03NED\x18\x04 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08VEL_Iner\x18\x05 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08\x41TTITUDE\x18\x06 \x02(\x0b\x32\x11.PyPacket.Vector3\x12 \n\x05OMEGA\x18\x07 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\x1e\n\x03LLA\x18\x08 \x01(\x0b\x32\x11.PyPacket.Vector3\"F\n\x17Simple1AKinematicsState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\"@\n\x11SimpleDubinsState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -33,8 +33,29 @@ _DUMMY_MSG = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='s', full_name='PyPacket.dummy_msg.s', index=0,
-      number=1, type=9, cpp_type=9, label=2,
+      name='packetNum', full_name='PyPacket.dummy_msg.packetNum', index=0,
+      number=1, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='ID', full_name='PyPacket.dummy_msg.ID', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='time', full_name='PyPacket.dummy_msg.time', index=2,
+      number=3, type=1, cpp_type=5, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='s', full_name='PyPacket.dummy_msg.s', index=3,
+      number=4, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -51,7 +72,7 @@ _DUMMY_MSG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=29,
-  serialized_end=51,
+  serialized_end=96,
 )
 
 
@@ -94,8 +115,8 @@ _VECTOR3 = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=53,
-  serialized_end=95,
+  serialized_start=98,
+  serialized_end=140,
 )
 
 
@@ -159,8 +180,8 @@ _NODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=97,
-  serialized_end=196,
+  serialized_start=142,
+  serialized_end=241,
 )
 
 
@@ -210,8 +231,8 @@ _SUBSCRIBER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=198,
-  serialized_end=271,
+  serialized_start=243,
+  serialized_end=316,
 )
 
 
@@ -261,8 +282,8 @@ _NMHEARTBEAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=273,
-  serialized_end=362,
+  serialized_start=318,
+  serialized_end=407,
 )
 
 
@@ -312,8 +333,8 @@ _NODEHEARTBEAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=364,
-  serialized_end=459,
+  serialized_start=409,
+  serialized_end=504,
 )
 
 
@@ -391,8 +412,8 @@ _SIXDOFSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=462,
-  serialized_end=692,
+  serialized_start=507,
+  serialized_end=737,
 )
 
 
@@ -435,8 +456,8 @@ _SIMPLE1AKINEMATICSSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=694,
-  serialized_end=764,
+  serialized_start=739,
+  serialized_end=809,
 )
 
 
@@ -479,8 +500,8 @@ _SIMPLEDUBINSSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=766,
-  serialized_end=830,
+  serialized_start=811,
+  serialized_end=875,
 )
 
 _NMHEARTBEAT.fields_by_name['nodes'].message_type = _NODE

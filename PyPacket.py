@@ -18,6 +18,9 @@ PacketData [N Bytes] -> Serialized Google buffer string (protobuf)
 
 import sys
 from struct import *
+from google.protobuf import text_format
+sys.path.insert(0, './protobuf')
+import PyPackets_pb2
 
 
 def printByteArrayInHex(array):
@@ -30,9 +33,15 @@ def printByteArrayInHex(array):
 
 #Enumeration of the Packet Types for simplicity using Hexadecimal
 class PacketDataType:
+	#GCS Messages
+	PKT_GCS_CMD_MSG = pack('b',01)
+	#Network Messages
 	PKT_NETWORK_MANAGER_HEARTBEAT = pack('b',10)#[0x0,0x0] #0x00
 	PKT_NODE_HEARTBEAT = pack('b',11)
 	PKT_DMY_MSG = pack('b',12)
+	#RF comm-aware project
+	PKT_RF_DATA_MSG = pack('b',13)
+	PKT_RF_MODEL_MSG = pack('b',14)
 	#More will be added
 	
 #Creation of a PacketID that is used for identifying where a packet source
@@ -122,11 +131,26 @@ class PyPacket(object):
 			return len(d)
 		else:
 			return 0
+			
+	def printData(self):
+		data = self.getData()
+		if self.getDataType() == PacketDataType.PKT_DMY_MSG:
+			msg = PyPackets_pb2.dummy_msg()
+			msg.ParseFromString(str(data))
+			return text_format.MessageToString(msg)
+		elif self.getDataType() == PacketDataType.PKT_NODE_HEARTBEAT:
+			msg = PyPackets_pb2.NodeHeartBeat()
+			msg.ParseFromString(str(data))
+			return text_format.MessageToString(msg)
+		else:
+			return 'No known data type'
+		
 		
 	def displayPacket(self):
 		print 'Type = ', printByteArrayInHex(self.getDataType())
 		#printByteArrayInHex(self.getDataType())
 		print 'ID = ', printByteArrayInHex(self.getID())
+		print 'Data:', self.printData()
 		print 'Size = ', self.getDataSize()
 		print 'Total Size = ', self.getPacketSize()
 		
