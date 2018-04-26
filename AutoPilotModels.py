@@ -36,6 +36,7 @@ class Simple1AKinematicsAutoPilotModel(threading.Thread):
 		self.centerLLA = [40.145081,-105.237551,1700]
 		boulderLLA = [40.130663,-105.244560,1700]
 		boulderENU = assorted_lib.LLA2ENU(boulderLLA,self.centerLLA)
+		print boulderENU
 		self.initial_waypoint = Waypoints.Waypoint(boulderLLA,boulderENU,1700, 0, 100, 100)
 		#Need a logger at some point
 		
@@ -52,12 +53,12 @@ class Simple1AKinematicsAutoPilotModel(threading.Thread):
 				
 				#Do the guidance / control stuff
 				Cmds = self.GM.circleLoiterCalc(waypoint,thisState)
-				print Cmds
+				#print Cmds
 				#Do the equations of motion stuff
 				stateDot = self.EoM.calculateDerivatives(thisState,Cmds)
-				print stateDot
+				#print stateDot
 				thisState = self.EoM.integrateState(thisState,stateDot,dT)
-				print thisState
+				#print thisState
 				#Output the states
 				self.writeOutStates(thisState,waypoint)
 				

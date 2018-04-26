@@ -23,11 +23,11 @@ class simple_guidance_alg():
 #Used with simple 1A kinematic model
 class Simple_1A_Guidance():
 	def __init__(self, cw):
-		
+		cw = False
 		if cw:
 			self.Lambda = 1;
 		else:
-			self.Lambda = 2;
+			self.Lambda = -1;
 			
 	def circleLoiterCalc(self, waypoint, state):
 		k_orbit = 2; #what is this for?
@@ -42,6 +42,7 @@ class Simple_1A_Guidance():
 		chi = state[3]
 		Va = state[6]
 		
+		#psi = math.atan2(pn-cn,pe-ce)
 		psi = math.atan2(pe-ce,pn-cn) + 2*pi*m
 		d = math.sqrt(math.pow((pn-cn),2) + math.pow((pe-ce),2))
 		psi = assorted_lib.unwrapAngle(psi-chi)
@@ -49,7 +50,7 @@ class Simple_1A_Guidance():
 		chi_C = psi + self.Lambda*(pi/2 + math.atan2(k_orbit*(d-radius),radius))
 		Va_C = Va
 		h_C = waypoint.asl;
-		chidot_C = Va/radius;
+		chidot_C = Va/radius * self.Lambda;
 		hdot_C = 0;
 		
 		inputs = [Va_C,chidot_C,chi_C,hdot_C,h_C]

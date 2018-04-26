@@ -166,7 +166,7 @@ class OneAKinematicsEoM(object):
 	def __init__(self):
 		self.wind_east = 0
 		self.wind_north = 0
-		#load the default model parameters
+		#load the default model parameters (Ttwistor)
 		self.bchi_dot = 0.5
 		self.bchi = 0.1
 		self.ah_dot = 1.0

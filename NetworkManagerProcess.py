@@ -123,6 +123,7 @@ def createNMStatusMessage(sublist,counter, MYID, totalMsgs, sincelastMsgs, avgde
     #list of the local publishers???
     #Size of Queue
     msg.messagesInQue = sizeOfQue
+	msg.numberOfLocalSubscribers = len(sublist)
     #Number of messages sent since last time
     msg.numberOfMsgs = sincelastMsgs
     msg.totalMsgsRecv = totalMsgs
@@ -224,6 +225,13 @@ def updateTotalSubList(SubListLocal,SubListGlobal):
 	        SubListGlobal.append(sl)
     #End of Loop
     return SubListGlobal
+	
+def calculateAvgTimeDelay(delayList):
+	#Loop through and sum
+	sum = 0
+	for i in delayList:
+		sum += i
+	return sum/len(delayList)
 
 #=============
 # Main Loops
@@ -278,6 +286,8 @@ message_queues = Queue.Queue()
 Quit = False
 deltaT_status = 0
 deltaT_nmhb = 0
+lastT_status = time.time()
+lastT_nmhb = time.time()
 status_msg_rate = 5
 nmhb_msg_rate = 10
 nmhb_counter = 0
@@ -313,12 +323,22 @@ while not Quit:
             status_counter += 1 #increment counter
             total_messages_recieved += messages_recieved
             #calculate avg time delay
-            
+            delay = calculateAvgTimeDelay(time_delay)
+			#Get size of que
+			size = message_queues.qsize()
+			#Create the msg str
             msg_str = createNMStatusMessage(SubscriberListInternal,status_counter,id,total_messages_recieved,messages_recieved,delay,size)
-            #create the message
+            #add to the packet
+			nmsm_pkt.setData(msg_str)
             messages_recieved = 0 #rest
-            #list of subscribers
-            #add it to the que
+            #list of subscribers whow ant this message
+			for s in SubscriberListFull:
+				if s.TYPE == PyPacket.PacketDataType.PKT_NETWORK_MANAGER_STATUS:
+					if s.ID == id:
+						#add it to the que
+						message_queues.put([s.getAddress(),nmsm.getPacket(),recvtime])
+			#end for loop
+		#end msg generation loop
             
         #print >>sys.stderr, '\nwaiting for the next event'
         readable, writable, exceptional = select.select(inputs, outputs, inputs)
