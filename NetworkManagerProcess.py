@@ -110,7 +110,7 @@ def createNMHBMessage(sublist,nmlist, counter, MYID, MYIP, MYPORT):
 def createNMStatusMessage(sublist,counter, MYID, totalMsgs, sincelastMsgs, avgdelay, sizeOfQue):
     msg = PyPackets_pb2.NMStatus()
     msg.packetNum = counter
-    msg.ID = MYID
+    msg.ID = MYID.getBytes()
     msg.time = time.time()
     #List of the local subscribers
     for s in sublist:

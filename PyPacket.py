@@ -175,34 +175,34 @@ def getNMStatus():
     return [PyPackets_pb2.NMStatus(), 'NMStatus']
 
 def getNMHeartBeat():
-    return PyPackets_pb2.NMHeartBeat()
+    return [PyPackets_pb2.NMHeartBeat(), 'NMHeartBeat']
 
 def getGCSCommand():
     return Null
 
 def getNodeHeartBeat():
-    return PyPackets_pb2.NodeHeartBeat()
+    return [PyPackets_pb2.NodeHeartBeat(), 'NodeHeartBeat']
 
 def getDummy():
-    return PyPackets_pb2.dummy_msg()
+    return [PyPackets_pb2.dummy_msg(), 'DummyMsg']
 	
 def getAircraftPixhawkState():
-	return PyPackets_pb2.AircraftPixhawkState()
+	return [PyPackets_pb2.AircraftPixhawkState(), 'AircraftPixhawkState']
 	
 def getRF_PL_Map_Msg():
-	return PyPackets_pb2.RF_PL_Map_Msg()
+	return [PyPackets_pb2.RF_PL_Map_Msg(),'RF_PL_Map_Msg']
 	
 def getRF_Data_Msg():
-	return PyPackets_pb2.RF_Data_Msg()
+	return [PyPackets_pb2.RF_Data_Msg(),'RF_Data_Msg']
 
 
 TypeDictionaryDispatch = {
-    PacketDataType.PKT_NETWORK_MANAGER_STATUS: getNMStatus,
-    PacketDataType.PKT_NETWORK_MANAGER_HEARTBEAT: getNMHeartBeat,
-    PacketDataType.PKT_GCS_CMD_MSG: getGCSCommand,
-    PacketDataType.PKT_DMY_MSG: getDummy,
-    PacketDataType.PKT_NODE_HEARTBEAT: getNodeHeartBeat,
-	PacketDataType.PKT_AUTOPILOT_PIXHAWK: getAircraftPixhawkState,
-	PacketDataType.PKT_RF_DATA_MSG: getRF_Data_Msg,
-	PacketDataType.PKT_RF_PL_MAP_MSG: getRF_PL_Map_Msg
+    str(PacketDataType.PKT_NETWORK_MANAGER_STATUS): getNMStatus,
+    str(PacketDataType.PKT_NETWORK_MANAGER_HEARTBEAT): getNMHeartBeat,
+    str(PacketDataType.PKT_GCS_CMD_MSG): getGCSCommand,
+    str(PacketDataType.PKT_DMY_MSG): getDummy,
+    str(PacketDataType.PKT_NODE_HEARTBEAT): getNodeHeartBeat,
+	str(PacketDataType.PKT_AUTOPILOT_PIXHAWK): getAircraftPixhawkState,
+	str(PacketDataType.PKT_RF_DATA_MSG): getRF_Data_Msg,
+	str(PacketDataType.PKT_RF_PL_MAP_MSG): getRF_PL_Map_Msg
 }

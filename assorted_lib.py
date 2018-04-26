@@ -1,8 +1,8 @@
 #Assorted Library
 import math
 
-f = 1/196.877360;
-Re = 3397000;
+f = 1/298.257223563
+Re = 6378137
 
 '''
 ==============
@@ -15,7 +15,7 @@ def unwrapAngle(angle):
 	out = angle;
 	while (out>math.pi):
 		out = out - 2*math.pi
-	while (out<=-math.pi):
+	while (out<-math.pi):
 		out = out + 2*math.pi
 	return out
 	
@@ -25,11 +25,11 @@ def NED2LLA(NED, center):
 	E = NED[1]
 	mu0 = center[0]
 	l0 = center[1]
-	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
-	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
+	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
+	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
 	dmu = math.atan2(1,Rm) * N
 	mu = mu0 + dmu
-	dl = math.atan2(1,Rn*math.cos(mu))
+	dl = math.atan2(1,Rn*math.cos(math.radians(mu)))*E
 	l = l0 + dl
 	LLA = [mu,l,-NED[2]]
 	return LLA
@@ -41,11 +41,11 @@ def ENU2LLA(ENU, center):
 	E = ENU[0]
 	mu0 = center[0]
 	l0 = center[1]
-	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
-	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
+	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
+	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
 	dmu = math.atan2(1,Rm) * N
 	mu = mu0 + dmu
-	dl = math.atan2(1,Rn*math.cos(mu))
+	dl = math.atan2(1,Rn*math.cos(math.radians(mu)))*E
 	l = l0 + dl
 	LLA = [mu,l,-NED[2]]
 	return LLA
@@ -58,10 +58,10 @@ def LLA2NED(LLA, center):
 	l0 = center[1]
 	dmu = mu - mu0
 	dl = l - l0
-	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
-	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
+	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
+	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
 	dN = dmu / (math.atan2(1,Rm))
-	dE = dl  / (math.atan2(1,Rn*math.cos(mu0)))
+	dE = dl  / (math.atan2(1,Rn*math.cos(math.radians(mu0))))
 	NED = [dN, dE, -LLA[2]]
 	return NED
 	
@@ -73,10 +73,10 @@ def LLA2ENU(LLA, center):
 	l0 = center[1]
 	dmu = mu - mu0
 	dl = l - l0
-	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
-	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(mu0),2))
+	Rn = Re / math.sqrt(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
+	Rm = Rn * (1 - (2*f - math.pow(f,2)))/(1 - (2*f - math.pow(f,2))*math.pow(math.sin(math.radians(mu0)),2))
 	dN = dmu / (math.atan2(1,Rm))
-	dE = dl  / (math.atan2(1,Rn*math.cos(mu0)))
+	dE = dl  / (math.atan2(1,Rn*math.cos(math.radians(mu0))))
 	ENU = [dE, dN, LLA[2]]
 	return ENU
 

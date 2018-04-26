@@ -44,10 +44,7 @@ class Simple_1A_Guidance():
 		
 		psi = math.atan2(pe-ce,pn-cn) + 2*pi*m
 		d = math.sqrt(math.pow((pn-cn),2) + math.pow((pe-ce),2))
-		while(psi - chi) < -pi:
-			psi = psi + 2*pi
-		while(psi - chi) > pi:
-			psi = psi - 2*pi
+		psi = assorted_lib.unwrapAngle(psi-chi)
 		
 		chi_C = psi + self.Lambda*(pi/2 + math.atan2(k_orbit*(d-radius),radius))
 		Va_C = Va

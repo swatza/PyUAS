@@ -187,18 +187,25 @@ class OneAKinematicsEoM(object):
 		Va = state[6]
 		
 		Va_C = inputs[0]
-		h_C = inputs[1]
-		hdot_C = inputs[2]
-		chi_C = inputs[3]
-		chidot_C = inputs[4]
+		h_C = inputs[4]
+		hdot_C = inputs[3]
+		chi_C = inputs[2]
+		chidot_C = inputs[1]
 		
 		yaw = chi - math.asin(1/Va * (wn*-math.sin(chi)+we*math.cos(chi)))
 	
 		pn_dot = Va*math.cos(yaw) + wn
 		pe_dot = Va*math.sin(yaw) + we
-		chidot_dot = self.bchi_dot*(chidot_C - chidot) + self.bchi*(chi_C - chi)
-		#hdot_dot = self.bh_dot*(hdot_C - hdot) + self.bh*(h_C - h)
-		hdot_dot = self.ah_dot * hdot_C - self.bh_dot * hdot + self.bh*(h_C - h)
+		delta_chi = chi_C - chi
+		delta_chi = assorted_lib.unwrapAngle(delta_chi)
+		if (chidot_C != 0):
+			if (chi_C == 0):
+				chidot_dot = self.bchi_dot * (chidot_C - chidot)
+			else:
+				chidot_dot = self.bchi_dot * (chidot_C - chidot) + self.bchi * delta_chi
+		else:
+			chidot_dot = self.bchi_dot * (chidot_C - chidot) + self.bchi * delta_chi
+		hdot_dot = -self.ah_dot * hdot_C - self.bh_dot * hdot + self.bh*(h_C - h)
 		Va_dot = self.bVa * (Va_C - Va)
 		
 		state_dot = [pn_dot,pe_dot,chidot_dot,chidot,hdot_dot,hdot,Va_dot]

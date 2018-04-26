@@ -32,11 +32,11 @@ class Simple1AKinematicsAutoPilotModel(threading.Thread):
 		self.shutdown_event = shutdownEvent
 		
 		#Load in the initial state and center LLA
-		self.state = [0,0,0,0,0,1700,10] #set the state
-		self.centerLLA = [39.7391,-104.9841,1700]
-		boulderLLA = [40.014984,-105.270546,1700]
+		self.state = [0,0,0,0,0,1700,15] #set the state
+		self.centerLLA = [40.145081,-105.237551,1700]
+		boulderLLA = [40.130663,-105.244560,1700]
 		boulderENU = assorted_lib.LLA2ENU(boulderLLA,self.centerLLA)
-		self.initial_waypoint = Waypoints.Waypoint(boulderLLA,boulderENU,1800, 0, 100, 100)
+		self.initial_waypoint = Waypoints.Waypoint(boulderLLA,boulderENU,1700, 0, 100, 100)
 		#Need a logger at some point
 		
 	def run(self):
@@ -47,18 +47,17 @@ class Simple1AKinematicsAutoPilotModel(threading.Thread):
 		while not self.shutdown_event.is_set():
 			#run the model at the specified run rate
 			dT = time.time() - lastTime
-			if (dT >= 1/self.runrate):
+			if (dT >= 1):
 				#Do How do we get a new waypoint?
-				print 'Performing Next State'
 				
 				#Do the guidance / control stuff
 				Cmds = self.GM.circleLoiterCalc(waypoint,thisState)
-				print 'Got Cmds from Guidance'
+				print Cmds
 				#Do the equations of motion stuff
 				stateDot = self.EoM.calculateDerivatives(thisState,Cmds)
-				print 'got derivatives'
+				print stateDot
 				thisState = self.EoM.integrateState(thisState,stateDot,dT)
-				print 'Iterated states'
+				print thisState
 				#Output the states
 				self.writeOutStates(thisState,waypoint)
 				
@@ -92,15 +91,15 @@ class Simple1AKinematicsAutoPilotModel(threading.Thread):
 		
 		msg.LLA_Pos.x = lla[0]#lat
 		msg.LLA_Pos.y = lla[1]#lon
-		msg.LLA_Pos.z = lla[2]#Alt (ASL)
+		msg.LLA_Pos.z = -lla[2]#Alt (ASL)
 		
 		msg.velocity.x = math.cos(states[3])*states[6]
-		msg.velocity.y = math.cos(states[3])*states[6]
+		msg.velocity.y = math.sin(states[3])*states[6]
 		msg.velocity.z = states[4]
 		
 		msg.attitude.x = 0
 		msg.attitude.y = 0
-		msg.attitude.z = states[3] * 180/math.pi
+		msg.attitude.z = states[3] #send in radians
 		
 		msg.airspeed = states[6]
 		
