@@ -5,18 +5,23 @@ package PyPacket;
 // --------------
 // Helper Classes
 // --------------
-message dummy_msg{
-	required uint32 packetNum = 1;
-	required string ID = 2;
-	required double time = 3;
-	required string s = 4;
-}
 
 //3 Element Vector
 message Vector3 {
 	required float x = 1;
 	required float y = 2;
 	required float z = 3;
+}
+
+message Battery{
+	required float voltage = 1;
+	optional float current = 2;
+	optional float level = 3;
+}
+
+message Waypoint{
+	required Vector3 LLA_Pos = 1;
+	optional float cost = 2; //for planning purposes
 }
 
 message Node {
@@ -28,21 +33,29 @@ message Node {
 	optional string NMID = 6; //ID of the network Manger associated with controlling said node
 }
 
+//Helper containing the information to build Subscriber Objects
 message Subscriber{
 	required string id = 1;
 	required string datatype = 2;
 	required uint32 port = 3;
-	required string address = 4;
+	required string address = 4; //SHOULD PROBABLY CHANGE THIS
+	required float msgfreq = 5; //In Hz
+}
+
+message NetworkManagers{
+	required string IP = 1;
+	required string PORT = 2; 
 }
 
 // -------------------------
-// Heartbeat Messsage
+//   Network Manager Messages
 // -------------------------
 message NMHeartBeat{
 	required uint32 packetNum = 1;
 	required string ID = 2;
 	required double time = 3;
-	repeated Node nodes = 4;
+	repeated Subscriber sub = 4; //Populates with its own internal list of subscribers (switches Address and Port with its own)
+	repeated NetworkManagers nms = 5; //to send a list of Network Managers; so atleast 1 can be updated or knows of others
 }
 
 message NodeHeartBeat{
@@ -52,10 +65,36 @@ message NodeHeartBeat{
 	repeated Subscriber sub = 4;
 }
 
-// --------------
-//  State Messages
-// --------------
+message NMStatus{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	//What do we want to have 
+	required uint32 numberOfMsgs = 4; //How many messages since last update 
+	required double avgTimeDelay = 5; //Avg time delay of messages in the NWM
+	required uint32 totalMsgsRcv = 6;  //How many messages since start of program
+	repeated Subscriber subs = 7; //List of all local subscribers
+	//Add publishers at some point
+	required uint32 messagesInQue = 8;
+	required uint32 numberOfLocalSubscribers = 9;
+	optional uint32 numberOfGlobalSubscribers = 10; //inclusive of local subscribers
+	//repeated Subscriber globalSubs = 11;
+}
 
+// -------------------------
+//  PyPacket Test Message
+// -------------------------
+
+message dummy_msg{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	required string s = 4;
+}
+
+// -------------------------
+//  State Messages
+// -------------------------
 message SixDofState{
 
 	required uint32 packetNum = 1;
@@ -81,11 +120,32 @@ message SimpleDubinsState{
 	required string ID = 2;
 	required double time = 3;
 }
+// -------------------------
+//  State Messages
+// -------------------------
+message AircraftPixhawkState{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	
+	required Vector3 LLA_Pos = 4; //lat, lon, alt
+	required Vector3 velocity = 5; //NED Frame [m/s]
+	required Vector3 attitude = 6; //Euler Angles [rad]
+	optional Vector3 omega = 7; //angular velocities [rad/s]
+	optional float airspeed = 8; //[m/s]
+	
+	required string mode = 9; //Mode of the aircraft
+	optional float distance_to_mav = 10;
+	
+	optional Battery batteryStatus = 11; //current battery information 
+	optional Waypoint currentWaypoint = 12; //current waypoint in mission plan
+}
 
 
-// ---------------
+
+// -------------------------
 // Sensor Messages
-// ---------------
+// -------------------------
 
 message SensorLocation{
 	required Vector3 LLA = 1;
@@ -103,10 +163,19 @@ message RFNode{
 	required float rssi = 2; //RSSI of channel
 	required float pl_msr = 3; //calculated "measured" path loss
 	required float pl_error = 4; //PL error between predicted and measured
-	optional int xgridNum = 5; //x grid number in the prediction field
-	optional int ygridNum = 6; //y grid number in the prediction field
+	optional uint32 xgridNum = 5; //x grid number in the prediction field
+	optional uint32 ygridNum = 6; //y grid number in the prediction field
 }
 
+message RFMapGrid{
+	required uint32 xgridNum = 1;
+	required uint32 ygridNum = 2;
+	required float est_path_loss = 3; //estimated path loss (combined err and prediction)
+	optional float path_loss_err = 4; // Learned path loss error
+	optional float pred_path_loss = 5; //Path loss predicted from model
+}
+
+//Message used to send the measured/sensed data at a given point
 message RF_Data_Msg{
 	required uint32 packetNum = 1;
 	required string ID = 2;
@@ -117,4 +186,26 @@ message RF_Data_Msg{
 	optional double airspeed = 6;
 	
 	repeated RFNode rfNode = 7;
+}
+
+//Message used to send the results of the Map estimation system
+message RF_PL_Map_Msg{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	
+	required uint32 gp_iteration_number = 4; //what iteration was this
+	required uint32 xGrids = 5; //specifications of the map size 
+	required uint32 yGrids = 6;
+	required uint32 xSpacing = 7;
+	required uint32 ySpacing = 8; 
+	repeated RFMapGrid cell = 9; //For each cell in the map
+	
+	optional Vector3 centerPoint = 10; //center point for the map
+	optional float gp_learning_time = 11; //how long it took to learn the hyper parameters
+	optional float gp_prediction_time = 12; //how long it took to predict using the hyper parameters
+	
+	optional Waypoint bestLocation = 13;
+	optional float costFromA = 14;
+	optional float costFromB = 15;
 }

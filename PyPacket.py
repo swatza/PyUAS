@@ -1,5 +1,3 @@
-
-
 '''
 The PYPACKET for wrapping google buffer messages in communication streams by indicating the type of data contained within 
 the string. At this layer, the Packet Data Type and PacketID allows for easy analysis and forwarding of the packet to
@@ -22,6 +20,7 @@ from google.protobuf import text_format
 sys.path.insert(0, './protobuf')
 import PyPackets_pb2
 
+RECVBUFF = 8192
 
 def printByteArrayInHex(array):
 	str = '0x'
@@ -32,16 +31,20 @@ def printByteArrayInHex(array):
 	return str
 
 #Enumeration of the Packet Types for simplicity using Hexadecimal
+#POSSIBLE NAMING COLLISION WITH CURRENT SETUP (two of the same data types being produced by 1 vehicle = same ID but different internal data)
 class PacketDataType:
 	#GCS Messages
 	PKT_GCS_CMD_MSG = pack('b',01)
+	#Aircraft State Msgs
+	PKT_AUTOPILOT_PIXHAWK = pack('b',02)
 	#Network Messages
 	PKT_NETWORK_MANAGER_HEARTBEAT = pack('b',10)#[0x0,0x0] #0x00
 	PKT_NODE_HEARTBEAT = pack('b',11)
+	PKT_NETWORK_MANAGER_STATUS = pack('b',15)
 	PKT_DMY_MSG = pack('b',12)
 	#RF comm-aware project
 	PKT_RF_DATA_MSG = pack('b',13)
-	PKT_RF_MODEL_MSG = pack('b',14)
+	PKT_RF_PL_MAP_MSG = pack('b',14)
 	#More will be added
 	
 #Creation of a PacketID that is used for identifying where a packet source
@@ -104,7 +107,7 @@ class PyPacket(object):
 		return self.packet[1:4]
 		
 	def setID(self, bytesIn):
-		if len(self.packet) == 1:
+		if len(self.packet) == 1: #THIS NEEDS TO BE FIXED: no case for when the datatype hasn't been assigned
 			for r in range(3):
 				self.packet.append(bytesIn[r])
 		else:
@@ -120,8 +123,21 @@ class PyPacket(object):
 			return self.packet[4:len(self.packet)]
 		else:
 			return 
+			
+	def clearData(self):
+		#DOESN'T WORK
+		#copy id and datatype
+		copyOfId = self.getID()
+		copyOfDT = self.getDataType()
+		#clear byte array
+		self.reset()
+		#replace
+		self.setDataType(copyOfDT)
+		self.setID(copyOfId)
 		
 	def setData(self, d):
+		if len(self.packet) > 4:
+			del self.packet[4:len(self.packet)]
 		for i in range(len(d)):
 			self.packet.append(d[i])
 	
@@ -153,4 +169,40 @@ class PyPacket(object):
 		print 'Data:', self.printData()
 		print 'Size = ', self.getDataSize()
 		print 'Total Size = ', self.getPacketSize()
-		
+
+
+def getNMStatus():
+    return [PyPackets_pb2.NMStatus(), 'NMStatus']
+
+def getNMHeartBeat():
+    return PyPackets_pb2.NMHeartBeat()
+
+def getGCSCommand():
+    return Null
+
+def getNodeHeartBeat():
+    return PyPackets_pb2.NodeHeartBeat()
+
+def getDummy():
+    return PyPackets_pb2.dummy_msg()
+	
+def getAircraftPixhawkState():
+	return PyPackets_pb2.AircraftPixhawkState()
+	
+def getRF_PL_Map_Msg():
+	return PyPackets_pb2.RF_PL_Map_Msg()
+	
+def getRF_Data_Msg():
+	return PyPackets_pb2.RF_Data_Msg()
+
+
+TypeDictionaryDispatch = {
+    PacketDataType.PKT_NETWORK_MANAGER_STATUS: getNMStatus,
+    PacketDataType.PKT_NETWORK_MANAGER_HEARTBEAT: getNMHeartBeat,
+    PacketDataType.PKT_GCS_CMD_MSG: getGCSCommand,
+    PacketDataType.PKT_DMY_MSG: getDummy,
+    PacketDataType.PKT_NODE_HEARTBEAT: getNodeHeartBeat,
+	PacketDataType.PKT_AUTOPILOT_PIXHAWK: getAircraftPixhawkState,
+	PacketDataType.PKT_RF_DATA_MSG: getRF_Data_Msg,
+	PacketDataType.PKT_RF_PL_MAP_MSG: getRF_PL_Map_Msg
+}
