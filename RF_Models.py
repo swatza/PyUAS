@@ -12,7 +12,7 @@ LIGHT_SPEED = 3000000 #Approximate
 Classes for generating RF Measurements
 '''
 class Terrain_RF_Model(object):
-	def __init__(self)
+	def __init__(self):
 		pass
 	
 	def generateMeasurement(transmitterInfo, ENU_Rec):
@@ -26,7 +26,7 @@ class Terrain_RF_Model(object):
 		numOfBytes = 4 # A float should be 4 Bytes 
 		#Calculate offset (Look how we store file, where do we keep information about spacing, etc)
 		offset = 4 * LLA
-		%Binary; convert to float 
+		#Binary; convert to float 
 		#open file
 		f.open(filename,'r')
 		#seek to the location of value
@@ -43,7 +43,7 @@ class Terrain_RF_Model(object):
 
 class Simple_RF_Model(object):
 	
-	def __init__(self,noiseType)
+	def __init__(self,noiseType):
 		self.noise = noiseType
 	
 	def generateMeasurement(transmitterInfo, ENU_Rec, Recv_Gains):
@@ -82,7 +82,7 @@ class RF_Transmitter(object):
 	#Antenna Gain
 	#Frequency
 	#Location LLA 
-	def __init__(self,Pt, Gt, freq, LLA)
+	def __init__(self,Pt, Gt, freq, LLA):
 		self.transmit_power = Pt
 		self.antenna_gain = Gt
 		self.frequencyGHZ = freq/1000000

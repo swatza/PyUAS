@@ -21,6 +21,7 @@ sys.path.insert(0, './protobuf')
 import PyPackets_pb2
 
 RECVBUFF = 8192
+#TODO: Set the packet to be in a specific binary format (Little Endian)
 
 def printByteArrayInHex(array):
 	str = '0x'
@@ -40,12 +41,15 @@ class PacketDataType:
 	#Network Messages
 	PKT_NETWORK_MANAGER_HEARTBEAT = pack('b',10)#[0x0,0x0] #0x00
 	PKT_NODE_HEARTBEAT = pack('b',11)
-	PKT_NETWORK_MANAGER_STATUS = pack('b',15)
-	PKT_DMY_MSG = pack('b',12)
+	PKT_NETWORK_MANAGER_STATUS = pack('b',12)
+	PKT_DMY_MSG = pack('b',13)
 	#RF comm-aware project
-	PKT_RF_DATA_MSG = pack('b',13)
-	PKT_RF_PL_MAP_MSG = pack('b',14)
+	PKT_RF_DATA_MSG = pack('b',14)
+	PKT_RF_PL_MAP_MSG = pack('b',15)
+	PKT_RF_STACKED_MAP_MSG = pack('b',16)
 	#More will be added
+	PKT_WAYPOINT = pack('b',17)
+	PKT_WAYPOINT_LIST = pack('b',18)
 	
 #Creation of a PacketID that is used for identifying where a packet source
 class PacketID:

@@ -47,7 +47,7 @@ class Simple_1A_Guidance():
 		d = math.sqrt(math.pow((pn-cn),2) + math.pow((pe-ce),2))
 		psi = assorted_lib.unwrapAngle(psi-chi)
 		
-		chi_C = psi + self.Lambda*(pi/2 + math.atan2(k_orbit*(d-radius),radius))
+		chi_C = psi + self.Lambda*(pi/2 + math.atan(k_orbit*(d-radius)/radius))
 		Va_C = Va
 		h_C = waypoint.asl;
 		chidot_C = Va/radius * self.Lambda;

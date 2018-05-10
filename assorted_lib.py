@@ -46,7 +46,7 @@ def ENU2LLA(ENU, center):
 	mu = mu0 + dmu
 	dl = math.atan2(1,Rn*math.cos(mu))*E
 	l = l0 + dl
-	LLA = [math.degrees(mu),math.degrees(l),-NED[2]]
+	LLA = [math.degrees(mu),math.degrees(l),-ENU[2]]
 	return LLA
 	
 def LLA2NED(LLA, center):

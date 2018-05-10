@@ -22,6 +22,8 @@ message Battery{
 message Waypoint{
 	required Vector3 LLA_Pos = 1;
 	optional float cost = 2; //for planning purposes
+	optional float costF1 = 3; //from half
+	optional float costF2 = 4; //from half
 }
 
 message Node {
@@ -201,11 +203,11 @@ message RF_PL_Map_Msg{
 	required uint32 ySpacing = 8; 
 	repeated RFMapGrid cell = 9; //For each cell in the map
 	
-	optional Vector3 centerPoint = 10; //center point for the map
+	optional Vector3 centerPointLLA = 10; //center point for the map
 	optional float gp_learning_time = 11; //how long it took to learn the hyper parameters
 	optional float gp_prediction_time = 12; //how long it took to predict using the hyper parameters
-	
-	optional Waypoint bestLocation = 13;
-	optional float costFromA = 14;
-	optional float costFromB = 15;
+}
+
+message RF_STACKED_MAP_MSG{
+	repeated RF_PL_Map_Msg mapMsg = 1
 }
