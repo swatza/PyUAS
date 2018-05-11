@@ -46,6 +46,8 @@ class PacketDataType:
 	PKT_RF_DATA_MSG = pack('b',13)
 	PKT_RF_PL_MAP_MSG = pack('b',14)
 	#More will be added
+	PKT_BALLOON_SENSOR_MSG = pack('b',30)
+	PKT_BALLOON_SENSOR_SET = pack('b',31)
 	
 #Creation of a PacketID that is used for identifying where a packet source
 class PacketID:
@@ -194,6 +196,12 @@ def getRF_PL_Map_Msg():
 	
 def getRF_Data_Msg():
 	return [PyPackets_pb2.RF_Data_Msg(),'RF_Data_Msg']
+	
+def getBalloon_Sensor_Msg():
+	return [PyPackets_pb2.Balloon_Sensor_Msg(),'Balloon_Sensor_Msg']
+	
+def getBalloon_Sensor_Set_Msg():
+	return [PyPackets_pb2.Balloon_Sensor_Set_Msg(),'Balloon_Sensor_Set_Msg']
 
 
 TypeDictionaryDispatch = {
@@ -204,5 +212,7 @@ TypeDictionaryDispatch = {
     str(PacketDataType.PKT_NODE_HEARTBEAT): getNodeHeartBeat,
 	str(PacketDataType.PKT_AUTOPILOT_PIXHAWK): getAircraftPixhawkState,
 	str(PacketDataType.PKT_RF_DATA_MSG): getRF_Data_Msg,
-	str(PacketDataType.PKT_RF_PL_MAP_MSG): getRF_PL_Map_Msg
+	str(PacketDataType.PKT_RF_PL_MAP_MSG): getRF_PL_Map_Msg,
+	str(PacketDataType.PKT_BALLOON_SENSOR_MSG): getBalloon_Sensor_Msg,
+	str(PacketDataType.PKT_BALLOON_SENSOR_SET): getBalloon_Sensor_Set_Msg
 }

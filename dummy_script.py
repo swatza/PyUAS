@@ -127,7 +127,7 @@ class WritingThread(threading.Thread):
 		PacketCounterNode = 1;
 		TestSubs = []
 		#Generate the subs here (hardcoded) 
-		subA = Subscriber.Subscriber(PyPacket.PacketDataType.PKT_DMY_MSG,PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,20).getBytes(),PORT,'localhost',1)
+		subA = Subscriber.Subscriber(PyPacket.PacketDataType.PKT_DMY_MSG,PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,10).getBytes(),PORT,'localhost',1)
 		subB = Subscriber.Subscriber(PyPacket.PacketDataType.PKT_DMY_MSG,PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,20).getBytes(),PORT,'localhost',1)
 		subC = Subscriber.Subscriber(PyPacket.PacketDataType.PKT_DMY_MSG,PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,30).getBytes(),PORT,'localhost',1)
 		subD = Subscriber.Subscriber(PyPacket.PacketDataType.PKT_DMY_MSG,PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,40).getBytes(),PORT,'localhost',1)
