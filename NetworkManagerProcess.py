@@ -33,79 +33,79 @@ RECV_BUFF = 8192
 #============
 
 def parsePacket(pkt,SubList):
-	"""Determines which subscribers to forward the pypacket to.
-	
-	Using a list of subscribers, this function loops through and determines all possible subscribers that would
-	be interested in receiving this packet. The system checks the ID and datatype as well as the frequency rate 
-	that the subscriber requests
-	
-	Args:
-		arg1 (PyPacket): A PyPacket Object that needs to be forwarded
-		arg2 (List<Subscriber>): A List of Subscribers that the manager knows of
-	Returns:
-		List<Subscriber>: List of subscribers that the packet needs to be forwarded to
-	"""
-	#print the packet
-	#pkt.displayPacket()
-	#get the data type
-	data_type = pkt.getDataType()
-	#get the identifier
-	identifier = pkt.getID()
-	#check for subscribers internal and external
-	sendList = []
-	currentTime = time.time()
-	for s in SubList:
-		#check for the correct sub
-		if s.TYPE == data_type:
-			if s.ID == identifier:
-				#Check the request rate
-				if((currentTime - s.getLastTime()) >= s.getRequestTime()):
-					s.setLastTime(currentTime) #update the last time it was sent
-					sendList.append(s) #Add it to the list
-	#Return send list
-	return sendList
+    """Determines which subscribers to forward the pypacket to.
+    
+    Using a list of subscribers, this function loops through and determines all possible subscribers that would
+    be interested in receiving this packet. The system checks the ID and datatype as well as the frequency rate 
+    that the subscriber requests
+    
+    Args:
+        arg1 (PyPacket): A PyPacket Object that needs to be forwarded
+        arg2 (List<Subscriber>): A List of Subscribers that the manager knows of
+    Returns:
+        List<Subscriber>: List of subscribers that the packet needs to be forwarded to
+    """
+    #print the packet
+    #pkt.displayPacket()
+    #get the data type
+    data_type = pkt.getDataType()
+    #get the identifier
+    identifier = pkt.getID()
+    #check for subscribers internal and external
+    sendList = []
+    currentTime = time.time()
+    for s in SubList:
+        #check for the correct sub
+        if s.TYPE == data_type:
+            if s.ID == identifier:
+                #Check the request rate
+                if((currentTime - s.getLastTime()) >= s.getRequestTime()):
+                    s.setLastTime(currentTime) #update the last time it was sent
+                    sendList.append(s) #Add it to the list
+    #Return send list
+    return sendList
 
 def forwardPacket(pkt, out_socket_queues,SubList,recvtime):
-	""" Loops through the list of subscribers to send the packet to and its to the out queue
-	
-	Forward packet takes the packet and list of subscribers to send to. It grabs the address of the subscriber
-	and adds the packet and the address to teh output queue. T
-	
-	Args:
-		arg1 (PyPacket): A pypacket object that needs to be forwarded
-		arg2 (Queue): Queue for sending messages
-		arg3 (List<Subscriber>): A list of subscribers taht need to get hte packet
-	Returns:
-		Queue: Messages that were added to the queue
-	"""
-	sList = parsePacket(pkt,SubList) #figured out who to send the packet to
-	#for every address in the list, add it to the correct queue
-	for c in sList:
-		out_socket_queues.put([c.getAddress(),pkt.getPacket(),recvtime])
-	return out_socket_queues
+    """ Loops through the list of subscribers to send the packet to and its to the out queue
+    
+    Forward packet takes the packet and list of subscribers to send to. It grabs the address of the subscriber
+    and adds the packet and the address to teh output queue. T
+    
+    Args:
+        arg1 (PyPacket): A pypacket object that needs to be forwarded
+        arg2 (Queue): Queue for sending messages
+        arg3 (List<Subscriber>): A list of subscribers taht need to get hte packet
+    Returns:
+        Queue: Messages that were added to the queue
+    """
+    sList = parsePacket(pkt,SubList) #figured out who to send the packet to
+    #for every address in the list, add it to the correct queue
+    for c in sList:
+        out_socket_queues.put([c.getAddress(),pkt.getPacket(),recvtime])
+    return out_socket_queues
 
 def createNMHBMessage(sublist,nmlist, counter, MYID, MYIP, MYPORT):
-	msg = PyPackets_pb2.NMHeartBeat()
-	msg.packetNum = counter
-	msg.ID = MYID
-	msg.time = time.time()
-	#add local subscribers
-	for s in sublist:
-		new = msg.sub.add()
-		new.id = str(s.id)
-		new.datatype = str(s.TYPE)
-		new.port = MYPORT #my port
-		new.address = MYIP #my IP
-		new.msgfreq = s.FREQ
-	#end loop
-	#add network managers
-	for nm in nmlist:
-		new = msg.nms.add()
-		new.IP = nm[0]
-		new.PORT = nm[1]
-	#end loop
-	data_str = msg.SerializeToString()
-	return data_str 
+    msg = PyPackets_pb2.NMHeartBeat()
+    msg.packetNum = counter
+    msg.ID = MYID
+    msg.time = time.time()
+    #add local subscribers
+    for s in sublist:
+        new = msg.sub.add()
+        new.id = str(s.id)
+        new.datatype = str(s.TYPE)
+        new.port = MYPORT #my port
+        new.address = MYIP #my IP
+        new.msgfreq = s.FREQ
+    #end loop
+    #add network managers
+    for nm in nmlist:
+        new = msg.nms.add()
+        new.IP = nm[0]
+        new.PORT = nm[1]
+    #end loop
+    data_str = msg.SerializeToString()
+    return data_str 
 
 def createNMStatusMessage(sublist,counter, MYID, totalMsgs, sincelastMsgs, avgdelay, sizeOfQue):
     msg = PyPackets_pb2.NMStatus()
@@ -123,7 +123,7 @@ def createNMStatusMessage(sublist,counter, MYID, totalMsgs, sincelastMsgs, avgde
     #list of the local publishers???
     #Size of Queue
     msg.messagesInQue = sizeOfQue
-	msg.numberOfLocalSubscribers = len(sublist)
+    msg.numberOfLocalSubscribers = len(sublist)
     #Number of messages sent since last time
     msg.numberOfMsgs = sincelastMsgs
     msg.totalMsgsRecv = totalMsgs
@@ -164,7 +164,7 @@ def updateSubListFromNode(pkt,SubList):
             newsub = Subscriber.Subscriber(DT,ID,intPT,strAD,freq)
             #add to list
             SubList.append(newsub)
-	#end all possible subs
+    #end all possible subs
     return SubList
 
 """
@@ -222,16 +222,16 @@ def updateTotalSubList(SubListLocal,SubListGlobal):
                 included = False
         #Check
         if not included:
-	        SubListGlobal.append(sl)
+            SubListGlobal.append(sl)
     #End of Loop
     return SubListGlobal
-	
+    
 def calculateAvgTimeDelay(delayList):
-	#Loop through and sum
-	sum = 0
-	for i in delayList:
-		sum += i
-	return sum/len(delayList)
+    #Loop through and sum
+    sum = 0
+    for i in delayList:
+        sum += i
+    return sum/len(delayList)
 
 #=============
 # Main Loops
@@ -279,8 +279,8 @@ outputs = [manager_out_socket]
 #message_queues = {} #TBD
 message_queues = Queue.Queue()
 # for o in outputs:
-	# message_queues[o].Queue.Queue()
-	
+    # message_queues[o].Queue.Queue()
+    
 #message_queues.put([('localhost',16000), msg]) example how the message is stored in que
 
 Quit = False
@@ -296,6 +296,7 @@ status_counter = 0
 total_messages_recieved = 0 #total number of msgs
 messages_recieved = 0 #how many messages have we recieved since last reset
 time_delay = [] #how long the message sits in the Network Manager
+recvtime = 0.0
 
 print 'Starting!'
 currentTime = time.time()
@@ -316,7 +317,8 @@ while not Quit:
                 for nm in NetworkManagerList:
                     #add each NM target and message contents to the queue
                     message_queues.put([(nm[0],nm[1]),nmhb_pkt.getPacket()])
-            #Remove the message from packet
+                #Remove the message from packet
+        
         #Is it time to send a network status message
         if (deltaT_status >= status_msg_rate):
             #if there is a subscriber for this message
@@ -324,21 +326,21 @@ while not Quit:
             total_messages_recieved += messages_recieved
             #calculate avg time delay
             delay = calculateAvgTimeDelay(time_delay)
-			#Get size of que
-			size = message_queues.qsize()
-			#Create the msg str
+            #Get size of que
+            size = message_queues.qsize()
+            #Create the msg str
             msg_str = createNMStatusMessage(SubscriberListInternal,status_counter,id,total_messages_recieved,messages_recieved,delay,size)
             #add to the packet
-			nmsm_pkt.setData(msg_str)
+            nmsm_pkt.setData(msg_str)
             messages_recieved = 0 #rest
             #list of subscribers whow ant this message
-			for s in SubscriberListFull:
-				if s.TYPE == PyPacket.PacketDataType.PKT_NETWORK_MANAGER_STATUS:
-					if s.ID == id:
-						#add it to the que
-						message_queues.put([s.getAddress(),nmsm.getPacket(),recvtime])
-			#end for loop
-		#end msg generation loop
+            for s in SubscriberListFull:
+                if s.TYPE == PyPacket.PacketDataType.PKT_NETWORK_MANAGER_STATUS:
+                    if s.ID == id:
+                        #add it to the que
+                        message_queues.put([s.getAddress(),nmsm_pkt.getPacket(),recvtime])
+            #end for loop
+        #end msg generation loop
             
         #print >>sys.stderr, '\nwaiting for the next event'
         readable, writable, exceptional = select.select(inputs, outputs, inputs)
