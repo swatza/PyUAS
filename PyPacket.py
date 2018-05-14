@@ -174,7 +174,9 @@ class PyPacket(object):
 		print 'Size = ', self.getDataSize()
 		print 'Total Size = ', self.getPacketSize()
 
-
+'''
+Dictionary Dispatch Lookup for DataType and the Protobuf msg creation
+'''
 def getNMStatus():
     return [PyPackets_pb2.NMStatus(), 'NMStatus']
 
