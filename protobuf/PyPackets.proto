@@ -143,11 +143,18 @@ message AircraftPixhawkState{
 	optional Waypoint currentWaypoint = 12; //current waypoint in mission plan
 }
 
-
-
 // -------------------------
 // Sensor Messages
 // -------------------------
+
+//Pressure
+//Temperature
+//Humidity
+message PTH{
+	required float pressure = 1;
+	required float temperature = 2;
+	required float humidity = 3; 
+}
 
 message SensorLocation{
 	required Vector3 LLA = 1;
@@ -208,6 +215,25 @@ message RF_PL_Map_Msg{
 	optional float gp_prediction_time = 12; //how long it took to predict using the hyper parameters
 }
 
-message RF_STACKED_MAP_MSG{
+message RF_Stacked_Map_Msg{
 	repeated RF_PL_Map_Msg mapMsg = 1
+}
+
+//Message for Lagragian Drifter Project Balloons
+message Balloon_Sensor_Msg{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	
+	required PTH pthsensor = 4;
+	required Vector3 LLA_Pos = 5;
+	required Battery battery = 6;
+}
+
+message Balloon_Sensor_Set_Msg{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	
+	repeated Balloon_Sensor_Msg balloon = 4;
 }
