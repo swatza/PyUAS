@@ -216,7 +216,7 @@ message RF_PL_Map_Msg{
 }
 
 message RF_Stacked_Map_Msg{
-	repeated RF_PL_Map_Msg mapMsg = 1
+	repeated RF_PL_Map_Msg mapMsg = 1;
 }
 
 //Message for Lagragian Drifter Project Balloons
@@ -228,6 +228,9 @@ message Balloon_Sensor_Msg{
 	required PTH pthsensor = 4;
 	required Vector3 LLA_Pos = 5;
 	required Battery battery = 6;
+	
+	optional float rssi = 7; 
+	optional Vector3 Vel = 8;
 }
 
 message Balloon_Sensor_Set_Msg{
@@ -236,4 +239,7 @@ message Balloon_Sensor_Set_Msg{
 	required double time = 3;
 	
 	repeated Balloon_Sensor_Msg balloon = 4;
+	required uint32 NumberOfBalloons = 5;
+	
+	optional Vector3 receiverLLA_Pos = 6;
 }
