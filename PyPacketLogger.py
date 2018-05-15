@@ -69,7 +69,7 @@ class PyPacketLogger():
 		#open binary file in append mode
 		with open(self.logname, 'ab', 0) as outfile:
 			outfile.write(ts_str) #write the time stamp
-			outfile.write(size) #write out the size of the data message (so we know where it ends)
+			outfile.write(str(size)) #write out the size of the data message (so we know where it ends)
 			outfile.write(pypkt.getPacket()) #Write the data
 			outfile.flush() #force the write to happen
 			#COULD LOG SOMETHING?
