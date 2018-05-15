@@ -105,7 +105,7 @@ class PyPacketLogger():
 		newlocation = location + 4 + 8 + dsize
 		return newlocation
 		
-	def getPacketBufferFromLog():
+	def getPacketBufferFromLog(self):
 		return self.packetbuffer
 		
 class PyPacketBuffer():
