@@ -205,6 +205,9 @@ def getNodeHeartBeat():
     return [PyPackets_pb2.NodeHeartBeat(), 'NodeHeartBeat']
 
 
+def getDummy():
+    return [PyPackets_pb2.dummy_msg(), 'DummyMsg']
+
 def getAircraftPixhawkState():
     return [PyPackets_pb2.AircraftPixhawkState(), 'AircraftPixhawkState']
 
@@ -223,7 +226,6 @@ def getBalloon_Sensor_Msg():
 
 def getBalloon_Sensor_Set_Msg():
     return [PyPackets_pb2.Balloon_Sensor_Set_Msg(), 'Balloon_Sensor_Set_Msg']
-
 
 def getIRISS_Wrapper():
     return [PyPackets_pb2.IRISS_Wrapper(), 'IRISS_Wrapper']
