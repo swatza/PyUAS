@@ -230,7 +230,7 @@ def getBalloon_Sensor_Set_Msg():
 def getIRISS_Wrapper():
     return [PyPackets_pb2.IRISS_Wrapper(), 'IRISS_Wrapper']
 
-TypeDictionaryDispatch = {
+TypeDispatch = {
     str(PacketDataType.PKT_NETWORK_MANAGER_STATUS): getNMStatus,
     str(PacketDataType.PKT_NETWORK_MANAGER_HEARTBEAT): getNMHeartBeat,
     str(PacketDataType.PKT_GCS_CMD_MSG): getGCSCommand,
@@ -242,4 +242,30 @@ TypeDictionaryDispatch = {
     str(PacketDataType.PKT_BALLOON_SENSOR_MSG): getBalloon_Sensor_Msg,
     str(PacketDataType.PKT_BALLOON_SENSOR_SET): getBalloon_Sensor_Set_Msg,
     str(PacketDataType.PKT_IRISS_WRAPPER_MSG): getIRISS_Wrapper
+}
+
+def getAircraftPlatform():
+    return PacketPlatform.AIRCRAFT
+def getBalloonPlatform():
+    return PacketPlatform.BALLOON
+def getGCSPlatform():
+    return PacketPlatform.GROUND_CONTROL_STATION
+def getServerPlatform():
+    return PacketPlatform.SERVER_STATION
+def getCommandPlatform():
+    return PacketPlatform.COMMAND_AND_CONTROL_STATION
+def getDummyPlatform():
+    return PacketPlatform.DUMMY
+
+#Set the string to all lowercase for casting into the dictionary
+def formatPlatformString(string):
+    return string.lower()
+
+PlatformDispatch = {
+    str("aircraft"): getAircraftPlatform,
+    str("balloon"): getBalloonPlatform,
+    str("groundstation"): getGCSPlatform,
+    str("server"): getServerPlatform,
+    str("command"): getCommandPlatform,
+    str("dummy"): getDummyPlatform
 }

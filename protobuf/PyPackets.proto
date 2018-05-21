@@ -97,34 +97,6 @@ message dummy_msg{
 // -------------------------
 //  State Messages
 // -------------------------
-message SixDofState{
-
-	required uint32 packetNum = 1;
-	required string ID = 2;
-	required double time = 3;
-
-	required Vector3 NED = 4;
-	required Vector3 VEL_Iner = 5;
-	required Vector3 ATTITUDE = 6;
-	required Vector3 OMEGA = 7;
-	
-	optional Vector3 LLA = 8;
-}
-
-message Simple1AKinematicsState{
-	required uint32 packetNum = 1;
-	required string ID = 2;
-	required double time = 3;
-}
-
-message SimpleDubinsState{
-	required uint32 packetNum = 1;
-	required string ID = 2;
-	required double time = 3;
-}
-// -------------------------
-//  State Messages
-// -------------------------
 message AircraftPixhawkState{
 	required uint32 packetNum = 1;
 	required string ID = 2;
@@ -141,6 +113,16 @@ message AircraftPixhawkState{
 	
 	optional Battery batteryStatus = 11; //current battery information 
 	optional Waypoint currentWaypoint = 12; //current waypoint in mission plan
+}
+// -------------------------
+//  Command Messages
+// -------------------------
+message RF_Learn_Cmd{
+	required uint32 packetNum = 1;
+	required string ID = 2;
+	required double time = 3;
+	
+	repeated String NodesToLearn = 4;
 }
 
 // -------------------------
