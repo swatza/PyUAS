@@ -122,13 +122,20 @@ class PyPacket(object):
         return self.packet[1:4]
 
     def setID(self, bytesIn):
-        if len(self.packet) == 1:  # THIS NEEDS TO BE FIXED: no case for when the datatype hasn't been assigned
+        if len(self.packet) == 0:
+            #Add an empty byte for the datatype
+            self.packet.append(pack('b',0))
             for r in range(3):
+                # TODO! Fix me
+                self.packet.append(bytesIn[r])
+        elif len(self.packet) == 1:
+            for r in range(3):
+                # TODO! Fix me
                 self.packet.append(bytesIn[r])
         else:
-            self.packet[1] = bytesIn[0];
-            self.packet[2] = bytesIn[1];
-            self.packet[3] = bytesIn[2];
+            self.packet[1] = bytesIn[0]
+            self.packet[2] = bytesIn[1]
+            self.packet[3] = bytesIn[2]
 
     '''
     Get and Set the Packet Data 
@@ -140,19 +147,22 @@ class PyPacket(object):
             return None
             
     def clearData(self):
-        #DOESN'T WORK
         #copy id and datatype
         copyOfId = self.getID()
         copyOfDT = self.getDataType()
         #clear byte array
         self.reset()
         #replace
-        self.setDataType(copyOfDT)
+        self.setDataType(str(copyOfDT))
         self.setID(copyOfId)
+        #self.displayPacket()
         
     def setData(self, d):
         if len(self.packet) > 4:
-            del self.packet[4:len(self.packet)]
+            # Copy over the old parts
+            self.clearData()
+            # TODO! Change me
+            #del self.packet[4:len(self.packet)] Old Method
         for i in range(len(d)):
             self.packet.append(d[i])
 

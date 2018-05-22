@@ -9,6 +9,8 @@ import array
 sys.path.insert(0, './protobuf')
 import PyPacket
 import PyPackets_pb2
+from google.protobuf import json_format
+
 
 
 class PyPacketLogger():
@@ -71,7 +73,7 @@ class PyPacketLogger():
         # open binary file in append mode
         with open(self.logname, 'ab', 0) as outfile:
             outfile.write(ts_str)  # write the time stamp
-            outfile.write(str(size))  # write out the size of the data message (so we know where it ends)
+            outfile.write(size_str)  # write out the size of the data message (so we know where it ends)
             outfile.write(pypkt.getPacket())  # Write the data
             outfile.flush()  # force the write to happen
             # COULD LOG SOMETHING?
@@ -83,14 +85,16 @@ class PyPacketLogger():
         if name:
             self.logname = name
 
-        self.pypacket = PyPacket()
+        self.pypacket = PyPacket.PyPacket()
         # open as binary for reading
         seekbyte = 0
-        with open(self.lgoname, 'rb') as infile:
+        with open(self.logname, 'rb') as infile:
             # check to see if the seekbyte is at the end of file
-            f.seek(0, os.SEEK_END)
-            length_of_file = f.tell()
-            while seekbyte is not length_of_file:
+            infile.seek(0, os.SEEK_END)
+            length_of_file = infile.tell()
+            print length_of_file
+            while seekbyte != length_of_file:
+                print seekbyte
                 seekbyte = self.readPacketFromLog(infile, seekbyte)
         # We have finished reading in all the data
         if output_to_json_flag:
@@ -105,7 +109,7 @@ class PyPacketLogger():
             buffer_length = self.packetbuffer.getLengthOfBuffer()
             for i in range(0, buffer_length):
                 # read in a buffer packet
-                thispacket = self.packetbuffer.getFromList(i)
+                thispacket,timestamp = self.packetbuffer.getFromList(i)
                 # determine the google message
                 msg, thisType = PyPacket.TypeDispatch[str(thispacket.getDataType())]()
                 # parse to google message
@@ -122,12 +126,16 @@ class PyPacketLogger():
         readfile.seek(location)
         # first read the 8 bytes for timestamp
         inBytes = readfile.read(8)
+        #print len(inBytes)
         ts = struct.unpack('<d', inBytes)[0]
         # next read the 4 bytes for length of data
         inBytes = readfile.read(4)
+        #print len(inBytes)
         dsize = struct.unpack('<L', inBytes)[0]
+        #print dsize
         # read the data & create packet
         inBytes = readfile.read(dsize)
+        #print len(inBytes)
         self.pypacket.setPacket(inBytes)
         # add to the packet buffer
         self.packetbuffer.addtolist(self.pypacket, ts)
@@ -145,15 +153,15 @@ class PyPacketBuffer():
         self.tsbuffer = []
         self.length = 0
 
-    def addtolist(pypkt, ts):
-        databuffer.append(pypkt)
-        tsbuffer.append(ts)
-        length += 1
+    def addtolist(self, pypkt, ts):
+        self.databuffer.append(pypkt)
+        self.tsbuffer.append(ts)
+        self.length += 1
 
-    def getFromList(index):
-        if index >= self.length:
-            pkt = databuffer[index]
-            ts = databuffer[index]
+    def getFromList(self,index):
+        if index < self.length:
+            pkt = self.databuffer[index]
+            ts = self.databuffer[index]
             return pkt, ts
         else:
             # out of bounds
