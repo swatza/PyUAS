@@ -11,8 +11,6 @@ import PyPacket
 import PyPackets_pb2
 from google.protobuf import json_format
 
-
-
 class PyPacketLogger():
     # Time Stamp
     base_ext = '.pypl'
