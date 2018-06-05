@@ -5,6 +5,7 @@ Baseline Simulation using 1A Kinematics AutoPilot Model
 import sys
 import threading
 import time
+import logging
 import socket
 import Queue
 import select
@@ -46,10 +47,10 @@ socket_in = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 #socket_in.bind(('',19000)) #bind to the port we want 
 
 #Need to create a subscriber if you want to listen to anything like new waypoints
-
+logmode = logging.DEBUG
 
 #Create the autopilot task and start it
-AutoPilotTask = AutoPilotModels.Simple1AKinematicsAutoPilotModel(theirQue, shutdown_event)
+AutoPilotTask = AutoPilotModels.Simple1AKinematicsAutoPilotModel(theirQue, shutdown_event,logmode)
 AutoPilotTask.start()
 wThread = WritingThread(socket_out)
 wThread.start()

@@ -38,7 +38,7 @@ def printByteArrayInHex(array):
 # POSSIBLE NAMING COLLISION WITH CURRENT SETUP (two of the same data types being produced by 1 vehicle = same ID but different internal data)
 class PacketDataType:
     # GCS Messages
-    PKT_GCS_CMD_MSG = pack('b', 01)
+    PKT_GCS_CMD = pack('b', 01)
     # Aircraft State Msgs
     PKT_AUTOPILOT_PIXHAWK = pack('b', 02)
     # Network Messages
@@ -50,6 +50,7 @@ class PacketDataType:
     PKT_RF_DATA_MSG = pack('b', 14)
     PKT_RF_PL_MAP_MSG = pack('b', 15)
     PKT_RF_STACKED_MAP_MSG = pack('b', 16)
+    PKT_RF_LEARN_CMD = pack('b',19)
     # More will be added
     PKT_WAYPOINT = pack('b', 17)
     PKT_WAYPOINT_LIST = pack('b', 18)
@@ -72,6 +73,12 @@ class PacketID:
         bytesOut = bytearray(self.P)
         bytesOut.append(self.I)
         return bytesOut
+
+    def getPlatform(self):
+        return self.P #TODO! is this right?
+
+    def getIdentifier(self):
+        return self.I #TODO! is this right?
 
 # Enumeration of the Packet Platforms for simplicity
 class PacketPlatform:
@@ -202,18 +209,14 @@ Dictionary Dispatch Lookup for DataType and the Protobuf msg creation
 def getNMStatus():
     return [PyPackets_pb2.NMStatus(), 'NMStatus']
 
-
 def getNMHeartBeat():
     return [PyPackets_pb2.NMHeartBeat(), 'NMHeartBeat']
-
 
 def getGCSCommand():
     return Null
 
-
 def getNodeHeartBeat():
     return [PyPackets_pb2.NodeHeartBeat(), 'NodeHeartBeat']
-
 
 def getDummy():
     return [PyPackets_pb2.dummy_msg(), 'DummyMsg']
@@ -221,18 +224,20 @@ def getDummy():
 def getAircraftPixhawkState():
     return [PyPackets_pb2.AircraftPixhawkState(), 'AircraftPixhawkState']
 
-
 def getRF_PL_Map_Msg():
     return [PyPackets_pb2.RF_PL_Map_Msg(), 'RF_PL_Map_Msg']
-
 
 def getRF_Data_Msg():
     return [PyPackets_pb2.RF_Data_Msg(), 'RF_Data_Msg']
 
+def getRF_Learn_Cmd():
+    return [PyPackets_pb2.RF_Learn_Cmd(), 'RF_Learn_Cmd']
+
+def getRF_Stacked_Map_Msg():
+    return [PyPackets_pb2.RF_Stacked_Map_Msg, 'RF_Stacked_Map_Msg']
 
 def getBalloon_Sensor_Msg():
     return [PyPackets_pb2.Balloon_Sensor_Msg(), 'Balloon_Sensor_Msg']
-
 
 def getBalloon_Sensor_Set_Msg():
     return [PyPackets_pb2.Balloon_Sensor_Set_Msg(), 'Balloon_Sensor_Set_Msg']
@@ -243,12 +248,14 @@ def getIRISS_Wrapper():
 TypeDispatch = {
     str(PacketDataType.PKT_NETWORK_MANAGER_STATUS): getNMStatus,
     str(PacketDataType.PKT_NETWORK_MANAGER_HEARTBEAT): getNMHeartBeat,
-    str(PacketDataType.PKT_GCS_CMD_MSG): getGCSCommand,
+    str(PacketDataType.PKT_GCS_CMD): getGCSCommand,
     str(PacketDataType.PKT_DMY_MSG): getDummy,
     str(PacketDataType.PKT_NODE_HEARTBEAT): getNodeHeartBeat,
     str(PacketDataType.PKT_AUTOPILOT_PIXHAWK): getAircraftPixhawkState,
     str(PacketDataType.PKT_RF_DATA_MSG): getRF_Data_Msg,
     str(PacketDataType.PKT_RF_PL_MAP_MSG): getRF_PL_Map_Msg,
+    str(PacketDataType.PKT_RF_LEARN_CMD): getRF_Learn_Cmd,
+    str(PacketDataType.PKT_RF_STACKED_MAP_MSG): getRF_Stacked_Map_Msg,
     str(PacketDataType.PKT_BALLOON_SENSOR_MSG): getBalloon_Sensor_Msg,
     str(PacketDataType.PKT_BALLOON_SENSOR_SET): getBalloon_Sensor_Set_Msg,
     str(PacketDataType.PKT_IRISS_WRAPPER_MSG): getIRISS_Wrapper

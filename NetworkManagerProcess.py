@@ -350,7 +350,7 @@ while not Quit:
             dataPkt, address = s.recvfrom(RECV_BUFF)
             #Add in time received (so that way we can track delay between in/out of messages
             recvtime = time.time()
-            print >>sys.stderr, 'recieved "%s" from %s' %(len(dataPkt), address)
+            #print >>sys.stderr, 'recieved "%s" from %s' %(len(dataPkt), address)
             #increment messages recieved
             messages_recieved += 1
             #Assign datapkt as an object
@@ -369,7 +369,7 @@ while not Quit:
                 #Then update the full subscriber list
                 SubscriberListFull = updateTotalSubList(SubscriberListInternal,SubscriberListFull)
             else:
-                print('forwarding packet')
+                #print('forwarding packet')
                 message_queues = forwardPacket(newPkt,message_queues,SubscriberListFull,recvtime)
         #Handle Outputs
         for s in writable:
@@ -379,6 +379,8 @@ while not Quit:
                 time.sleep(.01)
             else:
                 s.sendto(next_msg[1],next_msg[0])
+                #self.logger.info("Message sent to: %s", ('localhost', self.NMPORT))
+                print'Sent Message to %s' % next_msg[0][1] #print out the port
                 time_delay.append(time.time() - next_msg[2])
 
     except (KeyboardInterrupt, SystemExit):

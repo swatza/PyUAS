@@ -46,11 +46,11 @@ class Simple_RF_Model(object):
 	def __init__(self,noiseType):
 		self.noise = noiseType
 	
-	def generateMeasurement(transmitterInfo, ENU_Rec, Recv_Gains):
-		TransENU = assorted_lib.LLA2ENU(transmitterInfo.LLA_Pos)
-		xdif = TransENU[0] - ENU_Rec[0];
-		ydif = TransENU[1] - ENU_Rec[1];
-		zdif = TransENU[2] - ENU_Rec[2];
+	def generateMeasurement(self,transmitter_info, enu_receiver, receiver_gains):
+		TransENU = assorted_lib.LLA2ENU(transmitter_info.LLA_Pos)
+		xdif = TransENU[0] - enu_receiver[0];
+		ydif = TransENU[1] - enu_receiver[1];
+		zdif = TransENU[2] - enu_receiver[2];
 		
 		distance = math.sqrt(math.pow(xdif,2) + math.pow(ydif,2) + math.pow(zdif,2))
 		

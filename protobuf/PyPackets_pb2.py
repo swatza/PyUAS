@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='PyPackets.proto',
   package='PyPacket',
-  serialized_pb=_b('\n\x0fPyPackets.proto\x12\x08PyPacket\"*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\":\n\x07\x42\x61ttery\x12\x0f\n\x07voltage\x18\x01 \x02(\x02\x12\x0f\n\x07\x63urrent\x18\x02 \x01(\x02\x12\r\n\x05level\x18\x03 \x01(\x02\"\\\n\x08Waypoint\x12\"\n\x07LLA_Pos\x18\x01 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\x0c\n\x04\x63ost\x18\x02 \x01(\x02\x12\x0e\n\x06\x63ostF1\x18\x03 \x01(\x02\x12\x0e\n\x06\x63ostF2\x18\x04 \x01(\x02\"c\n\x04Node\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61taType\x18\x02 \x02(\t\x12\x10\n\x08\x63ommType\x18\x03 \x02(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\x12\x0c\n\x04port\x18\x05 \x02(\t\x12\x0c\n\x04NMID\x18\x06 \x01(\t\"Z\n\nSubscriber\x12\n\n\x02id\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61tatype\x18\x02 \x02(\t\x12\x0c\n\x04port\x18\x03 \x02(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\x12\x0f\n\x07msgfreq\x18\x05 \x02(\x02\"+\n\x0fNetworkManagers\x12\n\n\x02IP\x18\x01 \x02(\t\x12\x0c\n\x04PORT\x18\x02 \x02(\t\"\x85\x01\n\x0bNMHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12!\n\x03sub\x18\x04 \x03(\x0b\x32\x14.PyPacket.Subscriber\x12&\n\x03nms\x18\x05 \x03(\x0b\x32\x19.PyPacket.NetworkManagers\"_\n\rNodeHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12!\n\x03sub\x18\x04 \x03(\x0b\x32\x14.PyPacket.Subscriber\"\xf9\x01\n\x08NMStatus\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x14\n\x0cnumberOfMsgs\x18\x04 \x02(\r\x12\x14\n\x0c\x61vgTimeDelay\x18\x05 \x02(\x01\x12\x14\n\x0ctotalMsgsRcv\x18\x06 \x02(\r\x12\"\n\x04subs\x18\x07 \x03(\x0b\x32\x14.PyPacket.Subscriber\x12\x15\n\rmessagesInQue\x18\x08 \x02(\r\x12 \n\x18numberOfLocalSubscribers\x18\t \x02(\r\x12!\n\x19numberOfGlobalSubscribers\x18\n \x01(\r\"C\n\tdummy_msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\t\n\x01s\x18\x04 \x02(\t\"\xe6\x01\n\x0bSixDofState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1e\n\x03NED\x18\x04 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08VEL_Iner\x18\x05 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08\x41TTITUDE\x18\x06 \x02(\x0b\x32\x11.PyPacket.Vector3\x12 \n\x05OMEGA\x18\x07 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\x1e\n\x03LLA\x18\x08 \x01(\x0b\x32\x11.PyPacket.Vector3\"F\n\x17Simple1AKinematicsState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\"@\n\x11SimpleDubinsState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\"\xe3\x02\n\x14\x41ircraftPixhawkState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\"\n\x07LLA_Pos\x18\x04 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08velocity\x18\x05 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08\x61ttitude\x18\x06 \x02(\x0b\x32\x11.PyPacket.Vector3\x12 \n\x05omega\x18\x07 \x01(\x0b\x32\x11.PyPacket.Vector3\x12\x10\n\x08\x61irspeed\x18\x08 \x01(\x02\x12\x0c\n\x04mode\x18\t \x02(\t\x12\x17\n\x0f\x64istance_to_mav\x18\n \x01(\x02\x12(\n\rbatteryStatus\x18\x0b \x01(\x0b\x32\x11.PyPacket.Battery\x12+\n\x0f\x63urrentWaypoint\x18\x0c \x01(\x0b\x32\x12.PyPacket.Waypoint\">\n\x03PTH\x12\x10\n\x08pressure\x18\x01 \x02(\x02\x12\x13\n\x0btemperature\x18\x02 \x02(\x02\x12\x10\n\x08humidity\x18\x03 \x02(\x02\"P\n\x0eSensorLocation\x12\x1e\n\x03LLA\x18\x01 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\x1e\n\x03\x45NU\x18\x02 \x02(\x0b\x32\x11.PyPacket.Vector3\"@\n\x0bRFSensorMsg\x12\x11\n\tpath_loss\x18\x01 \x02(\x02\x12\x0b\n\x03rss\x18\x02 \x02(\x02\x12\x11\n\tpacketNum\x18\x03 \x01(\r\"l\n\x06RFNode\x12\x0e\n\x06\x63hanID\x18\x01 \x02(\t\x12\x0c\n\x04rssi\x18\x02 \x02(\x02\x12\x0e\n\x06pl_msr\x18\x03 \x02(\x02\x12\x10\n\x08pl_error\x18\x04 \x02(\x02\x12\x10\n\x08xgridNum\x18\x05 \x01(\r\x12\x10\n\x08ygridNum\x18\x06 \x01(\r\"u\n\tRFMapGrid\x12\x10\n\x08xgridNum\x18\x01 \x02(\r\x12\x10\n\x08ygridNum\x18\x02 \x02(\r\x12\x15\n\rest_path_loss\x18\x03 \x02(\x02\x12\x15\n\rpath_loss_err\x18\x04 \x01(\x02\x12\x16\n\x0epred_path_loss\x18\x05 \x01(\x02\"\xb3\x01\n\x0bRF_Data_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1e\n\x03lla\x18\x04 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08\x61ttitude\x18\x05 \x01(\x0b\x32\x11.PyPacket.Vector3\x12\x10\n\x08\x61irspeed\x18\x06 \x01(\x01\x12 \n\x06rfNode\x18\x07 \x03(\x0b\x32\x10.PyPacket.RFNode\"\xa1\x02\n\rRF_PL_Map_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1b\n\x13gp_iteration_number\x18\x04 \x02(\r\x12\x0e\n\x06xGrids\x18\x05 \x02(\r\x12\x0e\n\x06yGrids\x18\x06 \x02(\r\x12\x10\n\x08xSpacing\x18\x07 \x02(\r\x12\x10\n\x08ySpacing\x18\x08 \x02(\r\x12!\n\x04\x63\x65ll\x18\t \x03(\x0b\x32\x13.PyPacket.RFMapGrid\x12)\n\x0e\x63\x65nterPointLLA\x18\n \x01(\x0b\x32\x11.PyPacket.Vector3\x12\x18\n\x10gp_learning_time\x18\x0b \x01(\x02\x12\x1a\n\x12gp_prediction_time\x18\x0c \x01(\x02\"=\n\x12RF_Stacked_Map_Msg\x12\'\n\x06mapMsg\x18\x01 \x03(\x0b\x32\x17.PyPacket.RF_PL_Map_Msg\"\xd9\x01\n\x12\x42\x61lloon_Sensor_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12 \n\tpthsensor\x18\x04 \x02(\x0b\x32\r.PyPacket.PTH\x12\"\n\x07LLA_Pos\x18\x05 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\"\n\x07\x62\x61ttery\x18\x06 \x02(\x0b\x32\x11.PyPacket.Battery\x12\x0c\n\x04rssi\x18\x07 \x01(\x02\x12\x1e\n\x03Vel\x18\x08 \x01(\x0b\x32\x11.PyPacket.Vector3\"\xba\x01\n\x16\x42\x61lloon_Sensor_Set_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12-\n\x07\x62\x61lloon\x18\x04 \x03(\x0b\x32\x1c.PyPacket.Balloon_Sensor_Msg\x12\x18\n\x10NumberOfBalloons\x18\x05 \x02(\r\x12*\n\x0freceiverLLA_Pos\x18\x06 \x01(\x0b\x32\x11.PyPacket.Vector3')
+  serialized_pb=_b('\n\x0fPyPackets.proto\x12\x08PyPacket\"*\n\x07Vector3\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\":\n\x07\x42\x61ttery\x12\x0f\n\x07voltage\x18\x01 \x02(\x02\x12\x0f\n\x07\x63urrent\x18\x02 \x01(\x02\x12\r\n\x05level\x18\x03 \x01(\x02\"\\\n\x08Waypoint\x12\"\n\x07LLA_Pos\x18\x01 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\x0c\n\x04\x63ost\x18\x02 \x01(\x02\x12\x0e\n\x06\x63ostF1\x18\x03 \x01(\x02\x12\x0e\n\x06\x63ostF2\x18\x04 \x01(\x02\"c\n\x04Node\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61taType\x18\x02 \x02(\t\x12\x10\n\x08\x63ommType\x18\x03 \x02(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\x12\x0c\n\x04port\x18\x05 \x02(\t\x12\x0c\n\x04NMID\x18\x06 \x01(\t\"Z\n\nSubscriber\x12\n\n\x02id\x18\x01 \x02(\t\x12\x10\n\x08\x64\x61tatype\x18\x02 \x02(\t\x12\x0c\n\x04port\x18\x03 \x02(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x02(\t\x12\x0f\n\x07msgfreq\x18\x05 \x02(\x02\"+\n\x0fNetworkManagers\x12\n\n\x02IP\x18\x01 \x02(\t\x12\x0c\n\x04PORT\x18\x02 \x02(\t\"\x85\x01\n\x0bNMHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12!\n\x03sub\x18\x04 \x03(\x0b\x32\x14.PyPacket.Subscriber\x12&\n\x03nms\x18\x05 \x03(\x0b\x32\x19.PyPacket.NetworkManagers\"_\n\rNodeHeartBeat\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12!\n\x03sub\x18\x04 \x03(\x0b\x32\x14.PyPacket.Subscriber\"\xf9\x01\n\x08NMStatus\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x14\n\x0cnumberOfMsgs\x18\x04 \x02(\r\x12\x14\n\x0c\x61vgTimeDelay\x18\x05 \x02(\x01\x12\x14\n\x0ctotalMsgsRcv\x18\x06 \x02(\r\x12\"\n\x04subs\x18\x07 \x03(\x0b\x32\x14.PyPacket.Subscriber\x12\x15\n\rmessagesInQue\x18\x08 \x02(\r\x12 \n\x18numberOfLocalSubscribers\x18\t \x02(\r\x12!\n\x19numberOfGlobalSubscribers\x18\n \x01(\r\"C\n\tdummy_msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\t\n\x01s\x18\x04 \x02(\t\"\xe3\x02\n\x14\x41ircraftPixhawkState\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\"\n\x07LLA_Pos\x18\x04 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08velocity\x18\x05 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08\x61ttitude\x18\x06 \x02(\x0b\x32\x11.PyPacket.Vector3\x12 \n\x05omega\x18\x07 \x01(\x0b\x32\x11.PyPacket.Vector3\x12\x10\n\x08\x61irspeed\x18\x08 \x01(\x02\x12\x0c\n\x04mode\x18\t \x02(\t\x12\x17\n\x0f\x64istance_to_mav\x18\n \x01(\x02\x12(\n\rbatteryStatus\x18\x0b \x01(\x0b\x32\x11.PyPacket.Battery\x12+\n\x0f\x63urrentWaypoint\x18\x0c \x01(\x0b\x32\x12.PyPacket.Waypoint\"Q\n\x0cRF_Learn_Cmd\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x14\n\x0cNodesToLearn\x18\x04 \x03(\t\">\n\x03PTH\x12\x10\n\x08pressure\x18\x01 \x02(\x02\x12\x13\n\x0btemperature\x18\x02 \x02(\x02\x12\x10\n\x08humidity\x18\x03 \x02(\x02\"P\n\x0eSensorLocation\x12\x1e\n\x03LLA\x18\x01 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\x1e\n\x03\x45NU\x18\x02 \x02(\x0b\x32\x11.PyPacket.Vector3\"@\n\x0bRFSensorMsg\x12\x11\n\tpath_loss\x18\x01 \x02(\x02\x12\x0b\n\x03rss\x18\x02 \x02(\x02\x12\x11\n\tpacketNum\x18\x03 \x01(\r\"l\n\x06RFNode\x12\x0e\n\x06\x63hanID\x18\x01 \x02(\t\x12\x0c\n\x04rssi\x18\x02 \x02(\x02\x12\x0e\n\x06pl_msr\x18\x03 \x02(\x02\x12\x10\n\x08pl_error\x18\x04 \x02(\x02\x12\x10\n\x08xgridNum\x18\x05 \x01(\r\x12\x10\n\x08ygridNum\x18\x06 \x01(\r\"u\n\tRFMapGrid\x12\x10\n\x08xgridNum\x18\x01 \x02(\r\x12\x10\n\x08ygridNum\x18\x02 \x02(\r\x12\x15\n\rest_path_loss\x18\x03 \x02(\x02\x12\x15\n\rpath_loss_err\x18\x04 \x01(\x02\x12\x16\n\x0epred_path_loss\x18\x05 \x01(\x02\"\xb3\x01\n\x0bRF_Data_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1e\n\x03lla\x18\x04 \x02(\x0b\x32\x11.PyPacket.Vector3\x12#\n\x08\x61ttitude\x18\x05 \x01(\x0b\x32\x11.PyPacket.Vector3\x12\x10\n\x08\x61irspeed\x18\x06 \x01(\x01\x12 \n\x06rfNode\x18\x07 \x03(\x0b\x32\x10.PyPacket.RFNode\"\xa1\x02\n\rRF_PL_Map_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12\x1b\n\x13gp_iteration_number\x18\x04 \x02(\r\x12\x0e\n\x06xGrids\x18\x05 \x02(\r\x12\x0e\n\x06yGrids\x18\x06 \x02(\r\x12\x10\n\x08xSpacing\x18\x07 \x02(\r\x12\x10\n\x08ySpacing\x18\x08 \x02(\r\x12!\n\x04\x63\x65ll\x18\t \x03(\x0b\x32\x13.PyPacket.RFMapGrid\x12)\n\x0e\x63\x65nterPointLLA\x18\n \x01(\x0b\x32\x11.PyPacket.Vector3\x12\x18\n\x10gp_learning_time\x18\x0b \x01(\x02\x12\x1a\n\x12gp_prediction_time\x18\x0c \x01(\x02\"=\n\x12RF_Stacked_Map_Msg\x12\'\n\x06mapMsg\x18\x01 \x03(\x0b\x32\x17.PyPacket.RF_PL_Map_Msg\"\xd9\x01\n\x12\x42\x61lloon_Sensor_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12 \n\tpthsensor\x18\x04 \x02(\x0b\x32\r.PyPacket.PTH\x12\"\n\x07LLA_Pos\x18\x05 \x02(\x0b\x32\x11.PyPacket.Vector3\x12\"\n\x07\x62\x61ttery\x18\x06 \x02(\x0b\x32\x11.PyPacket.Battery\x12\x0c\n\x04rssi\x18\x07 \x01(\x02\x12\x1e\n\x03Vel\x18\x08 \x01(\x0b\x32\x11.PyPacket.Vector3\"\xba\x01\n\x16\x42\x61lloon_Sensor_Set_Msg\x12\x11\n\tpacketNum\x18\x01 \x02(\r\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04time\x18\x03 \x02(\x01\x12-\n\x07\x62\x61lloon\x18\x04 \x03(\x0b\x32\x1c.PyPacket.Balloon_Sensor_Msg\x12\x18\n\x10NumberOfBalloons\x18\x05 \x02(\r\x12*\n\x0freceiverLLA_Pos\x18\x06 \x01(\x0b\x32\x11.PyPacket.Vector3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -577,173 +577,6 @@ _DUMMY_MSG = _descriptor.Descriptor(
 )
 
 
-_SIXDOFSTATE = _descriptor.Descriptor(
-  name='SixDofState',
-  full_name='PyPacket.SixDofState',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='packetNum', full_name='PyPacket.SixDofState.packetNum', index=0,
-      number=1, type=13, cpp_type=3, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='ID', full_name='PyPacket.SixDofState.ID', index=1,
-      number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='time', full_name='PyPacket.SixDofState.time', index=2,
-      number=3, type=1, cpp_type=5, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='NED', full_name='PyPacket.SixDofState.NED', index=3,
-      number=4, type=11, cpp_type=10, label=2,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='VEL_Iner', full_name='PyPacket.SixDofState.VEL_Iner', index=4,
-      number=5, type=11, cpp_type=10, label=2,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='ATTITUDE', full_name='PyPacket.SixDofState.ATTITUDE', index=5,
-      number=6, type=11, cpp_type=10, label=2,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='OMEGA', full_name='PyPacket.SixDofState.OMEGA', index=6,
-      number=7, type=11, cpp_type=10, label=2,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='LLA', full_name='PyPacket.SixDofState.LLA', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1020,
-  serialized_end=1250,
-)
-
-
-_SIMPLE1AKINEMATICSSTATE = _descriptor.Descriptor(
-  name='Simple1AKinematicsState',
-  full_name='PyPacket.Simple1AKinematicsState',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='packetNum', full_name='PyPacket.Simple1AKinematicsState.packetNum', index=0,
-      number=1, type=13, cpp_type=3, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='ID', full_name='PyPacket.Simple1AKinematicsState.ID', index=1,
-      number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='time', full_name='PyPacket.Simple1AKinematicsState.time', index=2,
-      number=3, type=1, cpp_type=5, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1252,
-  serialized_end=1322,
-)
-
-
-_SIMPLEDUBINSSTATE = _descriptor.Descriptor(
-  name='SimpleDubinsState',
-  full_name='PyPacket.SimpleDubinsState',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='packetNum', full_name='PyPacket.SimpleDubinsState.packetNum', index=0,
-      number=1, type=13, cpp_type=3, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='ID', full_name='PyPacket.SimpleDubinsState.ID', index=1,
-      number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='time', full_name='PyPacket.SimpleDubinsState.time', index=2,
-      number=3, type=1, cpp_type=5, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1324,
-  serialized_end=1388,
-)
-
-
 _AIRCRAFTPIXHAWKSTATE = _descriptor.Descriptor(
   name='AircraftPixhawkState',
   full_name='PyPacket.AircraftPixhawkState',
@@ -846,8 +679,59 @@ _AIRCRAFTPIXHAWKSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1391,
-  serialized_end=1746,
+  serialized_start=1020,
+  serialized_end=1375,
+)
+
+
+_RF_LEARN_CMD = _descriptor.Descriptor(
+  name='RF_Learn_Cmd',
+  full_name='PyPacket.RF_Learn_Cmd',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='packetNum', full_name='PyPacket.RF_Learn_Cmd.packetNum', index=0,
+      number=1, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='ID', full_name='PyPacket.RF_Learn_Cmd.ID', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='time', full_name='PyPacket.RF_Learn_Cmd.time', index=2,
+      number=3, type=1, cpp_type=5, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='NodesToLearn', full_name='PyPacket.RF_Learn_Cmd.NodesToLearn', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1377,
+  serialized_end=1458,
 )
 
 
@@ -890,8 +774,8 @@ _PTH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1748,
-  serialized_end=1810,
+  serialized_start=1460,
+  serialized_end=1522,
 )
 
 
@@ -927,8 +811,8 @@ _SENSORLOCATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1812,
-  serialized_end=1892,
+  serialized_start=1524,
+  serialized_end=1604,
 )
 
 
@@ -971,8 +855,8 @@ _RFSENSORMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1894,
-  serialized_end=1958,
+  serialized_start=1606,
+  serialized_end=1670,
 )
 
 
@@ -1036,8 +920,8 @@ _RFNODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1960,
-  serialized_end=2068,
+  serialized_start=1672,
+  serialized_end=1780,
 )
 
 
@@ -1094,8 +978,8 @@ _RFMAPGRID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2070,
-  serialized_end=2187,
+  serialized_start=1782,
+  serialized_end=1899,
 )
 
 
@@ -1166,8 +1050,8 @@ _RF_DATA_MSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2190,
-  serialized_end=2369,
+  serialized_start=1902,
+  serialized_end=2081,
 )
 
 
@@ -1273,8 +1157,8 @@ _RF_PL_MAP_MSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2372,
-  serialized_end=2661,
+  serialized_start=2084,
+  serialized_end=2373,
 )
 
 
@@ -1303,8 +1187,8 @@ _RF_STACKED_MAP_MSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2663,
-  serialized_end=2724,
+  serialized_start=2375,
+  serialized_end=2436,
 )
 
 
@@ -1382,8 +1266,8 @@ _BALLOON_SENSOR_MSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2727,
-  serialized_end=2944,
+  serialized_start=2439,
+  serialized_end=2656,
 )
 
 
@@ -1447,8 +1331,8 @@ _BALLOON_SENSOR_SET_MSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2947,
-  serialized_end=3133,
+  serialized_start=2659,
+  serialized_end=2845,
 )
 
 _WAYPOINT.fields_by_name['LLA_Pos'].message_type = _VECTOR3
@@ -1456,11 +1340,6 @@ _NMHEARTBEAT.fields_by_name['sub'].message_type = _SUBSCRIBER
 _NMHEARTBEAT.fields_by_name['nms'].message_type = _NETWORKMANAGERS
 _NODEHEARTBEAT.fields_by_name['sub'].message_type = _SUBSCRIBER
 _NMSTATUS.fields_by_name['subs'].message_type = _SUBSCRIBER
-_SIXDOFSTATE.fields_by_name['NED'].message_type = _VECTOR3
-_SIXDOFSTATE.fields_by_name['VEL_Iner'].message_type = _VECTOR3
-_SIXDOFSTATE.fields_by_name['ATTITUDE'].message_type = _VECTOR3
-_SIXDOFSTATE.fields_by_name['OMEGA'].message_type = _VECTOR3
-_SIXDOFSTATE.fields_by_name['LLA'].message_type = _VECTOR3
 _AIRCRAFTPIXHAWKSTATE.fields_by_name['LLA_Pos'].message_type = _VECTOR3
 _AIRCRAFTPIXHAWKSTATE.fields_by_name['velocity'].message_type = _VECTOR3
 _AIRCRAFTPIXHAWKSTATE.fields_by_name['attitude'].message_type = _VECTOR3
@@ -1491,10 +1370,8 @@ DESCRIPTOR.message_types_by_name['NMHeartBeat'] = _NMHEARTBEAT
 DESCRIPTOR.message_types_by_name['NodeHeartBeat'] = _NODEHEARTBEAT
 DESCRIPTOR.message_types_by_name['NMStatus'] = _NMSTATUS
 DESCRIPTOR.message_types_by_name['dummy_msg'] = _DUMMY_MSG
-DESCRIPTOR.message_types_by_name['SixDofState'] = _SIXDOFSTATE
-DESCRIPTOR.message_types_by_name['Simple1AKinematicsState'] = _SIMPLE1AKINEMATICSSTATE
-DESCRIPTOR.message_types_by_name['SimpleDubinsState'] = _SIMPLEDUBINSSTATE
 DESCRIPTOR.message_types_by_name['AircraftPixhawkState'] = _AIRCRAFTPIXHAWKSTATE
+DESCRIPTOR.message_types_by_name['RF_Learn_Cmd'] = _RF_LEARN_CMD
 DESCRIPTOR.message_types_by_name['PTH'] = _PTH
 DESCRIPTOR.message_types_by_name['SensorLocation'] = _SENSORLOCATION
 DESCRIPTOR.message_types_by_name['RFSensorMsg'] = _RFSENSORMSG
@@ -1576,33 +1453,19 @@ dummy_msg = _reflection.GeneratedProtocolMessageType('dummy_msg', (_message.Mess
   ))
 _sym_db.RegisterMessage(dummy_msg)
 
-SixDofState = _reflection.GeneratedProtocolMessageType('SixDofState', (_message.Message,), dict(
-  DESCRIPTOR = _SIXDOFSTATE,
-  __module__ = 'PyPackets_pb2'
-  # @@protoc_insertion_point(class_scope:PyPacket.SixDofState)
-  ))
-_sym_db.RegisterMessage(SixDofState)
-
-Simple1AKinematicsState = _reflection.GeneratedProtocolMessageType('Simple1AKinematicsState', (_message.Message,), dict(
-  DESCRIPTOR = _SIMPLE1AKINEMATICSSTATE,
-  __module__ = 'PyPackets_pb2'
-  # @@protoc_insertion_point(class_scope:PyPacket.Simple1AKinematicsState)
-  ))
-_sym_db.RegisterMessage(Simple1AKinematicsState)
-
-SimpleDubinsState = _reflection.GeneratedProtocolMessageType('SimpleDubinsState', (_message.Message,), dict(
-  DESCRIPTOR = _SIMPLEDUBINSSTATE,
-  __module__ = 'PyPackets_pb2'
-  # @@protoc_insertion_point(class_scope:PyPacket.SimpleDubinsState)
-  ))
-_sym_db.RegisterMessage(SimpleDubinsState)
-
 AircraftPixhawkState = _reflection.GeneratedProtocolMessageType('AircraftPixhawkState', (_message.Message,), dict(
   DESCRIPTOR = _AIRCRAFTPIXHAWKSTATE,
   __module__ = 'PyPackets_pb2'
   # @@protoc_insertion_point(class_scope:PyPacket.AircraftPixhawkState)
   ))
 _sym_db.RegisterMessage(AircraftPixhawkState)
+
+RF_Learn_Cmd = _reflection.GeneratedProtocolMessageType('RF_Learn_Cmd', (_message.Message,), dict(
+  DESCRIPTOR = _RF_LEARN_CMD,
+  __module__ = 'PyPackets_pb2'
+  # @@protoc_insertion_point(class_scope:PyPacket.RF_Learn_Cmd)
+  ))
+_sym_db.RegisterMessage(RF_Learn_Cmd)
 
 PTH = _reflection.GeneratedProtocolMessageType('PTH', (_message.Message,), dict(
   DESCRIPTOR = _PTH,
