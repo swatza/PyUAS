@@ -122,7 +122,7 @@ message RF_Learn_Cmd{
 	required string ID = 2;
 	required double time = 3;
 	
-	repeated String NodesToLearn = 4;
+	repeated string NodesToLearn = 4;
 }
 
 // -------------------------

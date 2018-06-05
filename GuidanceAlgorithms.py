@@ -23,11 +23,11 @@ class simple_guidance_alg():
 #Used with simple 1A kinematic model
 class Simple_1A_Guidance():
 	def __init__(self, cw):
-		cw = False
+		cw = True
 		if cw:
-			self.Lambda = 1;
+			self.Lambda = 1.0;
 		else:
-			self.Lambda = -1;
+			self.Lambda = -1.0;
 			
 	def circleLoiterCalc(self, waypoint, state):
 		k_orbit = 2; #what is this for?
@@ -45,13 +45,17 @@ class Simple_1A_Guidance():
 		#psi = math.atan2(pn-cn,pe-ce)
 		psi = math.atan2(pe-ce,pn-cn) + 2*pi*m
 		d = math.sqrt(math.pow((pn-cn),2) + math.pow((pe-ce),2))
-		psi = assorted_lib.unwrapAngle(psi-chi)
-		
-		chi_C = psi + self.Lambda*(pi/2 + math.atan(k_orbit*(d-radius)/radius))
+		#Modified Unwrap
+		while (psi - chi) < -pi:
+			psi = psi + 2 * pi
+		while (psi - chi) > pi:
+			psi = psi - 2*pi
+		chi_C = (pi/2 + math.atan(k_orbit*(d-radius)/radius)) + psi #TODO! self.Lambda is throwing a math error of some sort
+		#chi_c = psi + self.Lambda * (pi/2 + math.atan(k_orbit*(d-radius)/radius))
 		Va_C = Va
-		h_C = waypoint.asl;
-		chidot_C = Va/radius * self.Lambda;
-		hdot_C = 0;
+		h_C = waypoint.asl
+		chidot_C = Va/radius
+		hdot_C = 0
 		
 		inputs = [Va_C,chidot_C,chi_C,hdot_C,h_C]
 		#write the return part

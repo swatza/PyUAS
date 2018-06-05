@@ -192,7 +192,7 @@ class OneAKinematicsEoM(object):
 		chi_C = inputs[2]
 		chidot_C = inputs[1]
 		
-		yaw = chi - math.asin(1/Va * (wn*-math.sin(chi)+we*math.cos(chi)))
+		yaw = chi - math.asin(1/Va * (wn*-math.sin(chi)+we*math.cos(chi))) #Wind relative calculation
 	
 		pn_dot = Va*math.cos(yaw) + wn
 		pe_dot = Va*math.sin(yaw) + we
