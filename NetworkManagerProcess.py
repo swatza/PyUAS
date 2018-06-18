@@ -66,7 +66,7 @@ def parsePacket(pkt,SubList):
     return sendList
 
 def forwardPacket(pkt, out_socket_queues,SubList,recvtime):
-    """ Loops through the list of subscribers to send the packet to and its to the out queue
+    ''' Loops through the list of subscribers to send the packet to and its to the out queue
     
     Forward packet takes the packet and list of subscribers to send to. It grabs the address of the subscriber
     and adds the packet and the address to teh output queue. T
@@ -77,7 +77,7 @@ def forwardPacket(pkt, out_socket_queues,SubList,recvtime):
         arg3 (List<Subscriber>): A list of subscribers taht need to get hte packet
     Returns:
         Queue: Messages that were added to the queue
-    """
+    '''
     sList = parsePacket(pkt,SubList) #figured out who to send the packet to
     #for every address in the list, add it to the correct queue
     for c in sList:
@@ -134,6 +134,20 @@ def createNMStatusMessage(sublist,counter, MYID, totalMsgs, sincelastMsgs, avgde
     return data_str
 
 """
+Check Sublist for since last heartbeat received and remove old ones that are over some threshold 
+"""
+def checkSubListForActiveListeners(SubList):
+    heartbeat_threshold = 30 #30 seconds for now
+    thisTime = time.time() # get current time stamp
+    for sub in SubList:
+        # Check the last time a heart beat was received
+        if thisTime - sub.getLastHeartBeatTime() > heartbeat_threshold:
+            #remove from sublist
+            SubList.remove(sub)
+            print 'Removed Subscriber'
+            sub.printSubInfo() #should print out relevant information of the subscriber that was removed
+
+"""
 Updates from a node (aka a process)
 """
 def updateSubListFromNode(pkt,SubList):
@@ -154,6 +168,7 @@ def updateSubListFromNode(pkt,SubList):
             if s.compareSub(ID,DT,intPT,strAD):
                 #already exists in list
                 included = True
+                s.setLastHeartBeatTime(time.time())
                 break
             else:
                 included = False
@@ -162,6 +177,7 @@ def updateSubListFromNode(pkt,SubList):
         if not included:
             #build sub
             newsub = Subscriber.Subscriber(DT,ID,intPT,strAD,freq)
+            newsub.setLastHeartBeatTime(time.time())
             #add to list
             SubList.append(newsub)
     #end all possible subs
@@ -188,6 +204,7 @@ def updateSubListFromNetwork(pkt,SubList):
         for s in SubList:
             if s.compareSub(ID,DT,intPT,strAD):
                 #already exists in list
+                s.setLastHeartBeatTime(time.time())
                 included = True
                 break
             else:
@@ -197,6 +214,7 @@ def updateSubListFromNetwork(pkt,SubList):
         if not included:
             #build sub
             newsub = Subscriber.Subscriber(DT,ID,intPT,strAD,freq)
+            newsub.setLastHeartBeatTime(time.time())
             #add to list
             SubList.append(newsub)
     #end all possible subs
@@ -204,7 +222,7 @@ def updateSubListFromNetwork(pkt,SubList):
 
 """
 Takes the local subscribers and adds those to global list if it doesn't have them included 
-FUTURE OPTIMIZATION: Only check for new subscribers not all of them
+TODO! FUTURE OPTIMIZATION: Only check for new subscribers not all of them
 """
 def updateTotalSubList(SubListLocal,SubListGlobal):
     for sl in SubListLocal:
@@ -278,23 +296,31 @@ outputs = [manager_out_socket]
 
 #message_queues = {} #TBD
 message_queues = Queue.Queue()
-# for o in outputs:
+# for o in outputs: #if we split the networkmanager into multiple processes
     # message_queues[o].Queue.Queue()
     
 #message_queues.put([('localhost',16000), msg]) example how the message is stored in que
 
 Quit = False
+
+
 deltaT_status = 0
-deltaT_nmhb = 0
 lastT_status = time.time()
-lastT_nmhb = time.time()
 status_msg_rate = 5
+
+deltaT_nmhb = 0
+lastT_nmhb = time.time()
 nmhb_msg_rate = 10
+
+deltaT_check = 0
+lastT_check = time.time()
+check_rate = 5
+
+#Message Counters
 nmhb_counter = 0
 status_counter = 0
-
 total_messages_recieved = 0 #total number of msgs
-messages_recieved = 0 #how many messages have we recieved since last reset
+messages_recieved = 0 #how many messages have we received since last reset
 time_delay = [] #how long the message sits in the Network Manager
 recvtime = 0.0
 
@@ -304,8 +330,13 @@ print currentTime
 
 while not Quit:
     try:
+        #Check subscribers for inactive listeners based on previous heartbeat
+        #TODO! run this at a lower frequency (like once a second or something or even less often
+        if deltaT_check >= check_rate:
+            checkSubListForActiveListeners(SubscriberListFull)
+            lastT_check = time.time()
         #Is it time to send a network heart beat message
-        if (deltaT_nmhb >= nmhb_msg_rate):
+        if deltaT_nmhb >= nmhb_msg_rate:
             #if the internal list isn't empty
             if (len(SubscriberListInternal) > 0 and len(NetworkManagerList) > 0):
                 #create the message
@@ -363,7 +394,7 @@ while not Quit:
                 #add the information to our full subscriber list 
                 SubscriberListFull = updateSubListFromNetwork(newPkt, SubscriberListFull)
             elif (newPkt.getDataType() == PyPacket.PacketDataType.PKT_NODE_HEARTBEAT):
-                print 'Recieved Node Heartbeat'
+                print 'Received Node Heartbeat'
                 #add the information to our local subscriber list
                 SubscriberListInternal = updateSubListFromNode(newPkt, SubscriberListInternal)
                 #Then update the full subscriber list

@@ -6,7 +6,8 @@ class Subscriber(object):
 		self.PORT = port #My PORT
 		self.IP = ip #My IP
 		self.FREQ = requestFreq #My Requested Data Rate
-		self.lastTime = 0
+		self.lastTime = 0 #Last time we sent a message to this subscriber
+		self.lastHeartBeatTime = 0  #last time we received a heartbeat for this subscriber
 		
 	def getAddress(self):
 		address = (self.IP,self.PORT)
@@ -34,3 +35,9 @@ class Subscriber(object):
 		
 	def getLastTime(self):
 		return self.lastTime
+
+	def setLastHeartBeatTime(self,time):
+		self.lastHeartBeatTime = time
+
+	def getLastHeartBeatTime(self):
+		return self.lastHeartBeatTime
