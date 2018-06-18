@@ -90,9 +90,9 @@ class PyPacketLogger():
             # check to see if the seekbyte is at the end of file
             infile.seek(0, os.SEEK_END)
             length_of_file = infile.tell()
-            print length_of_file
+            #print length_of_file
             while seekbyte != length_of_file:
-                print seekbyte
+                #print seekbyte
                 seekbyte = self.readPacketFromLog(infile, seekbyte)
         # We have finished reading in all the data
         if output_to_json_flag:
@@ -115,7 +115,7 @@ class PyPacketLogger():
                 # Parse to json
                 json_string = json_format.MessageToJson(msg)
                 outfile.write(json_string + "\n")
-                print 'wrote packet  %i to file' % i
+                print 'wrote packet %i to file' % i
             # end for loop
         # End open
 
