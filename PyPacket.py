@@ -21,7 +21,7 @@ from google.protobuf import text_format
 sys.path.insert(0, './protobuf')
 import PyPackets_pb2
 
-RECVBUFF = 8192
+RECVBUFF = 8192 #65536 #8192
 
 
 # TODO: Set the packet to be in a specific binary format (Little Endian)

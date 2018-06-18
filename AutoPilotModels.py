@@ -42,8 +42,9 @@ class Simple1AKinematicsAutoPilotModel(threading.Thread):
         #TODO! Add a packet logger
 
         #Load in the initial state and center LLA
+        #TODO! Allow these states to be set via inputs!
         self.state = [0,0,0,0,0,1700,15] #set the state
-        self.centerLLA = [40.145081,-105.237551,1700]
+        self.centerLLA = [40.137978,-105.244690,1700]
         boulderLLA = [40.130663,-105.244560,1700]
         boulderENU = assorted_lib.LLA2ENU(boulderLLA,self.centerLLA)
         self.logger.info(boulderENU) #TODO! could be possible error here

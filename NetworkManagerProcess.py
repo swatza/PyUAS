@@ -24,6 +24,7 @@ sys.path.insert(0, './protobuf')
 import PyPackets_pb2
 
 import PyPacket
+import PyPacketTypeCheck
 import Subscriber
 
 
@@ -83,55 +84,6 @@ def forwardPacket(pkt, out_socket_queues,SubList,recvtime):
     for c in sList:
         out_socket_queues.put([c.getAddress(),pkt.getPacket(),recvtime])
     return out_socket_queues
-
-def createNMHBMessage(sublist,nmlist, counter, MYID, MYIP, MYPORT):
-    msg = PyPackets_pb2.NMHeartBeat()
-    msg.packetNum = counter
-    msg.ID = MYID
-    msg.time = time.time()
-    #add local subscribers
-    for s in sublist:
-        new = msg.sub.add()
-        new.id = str(s.id)
-        new.datatype = str(s.TYPE)
-        new.port = MYPORT #my port
-        new.address = MYIP #my IP
-        new.msgfreq = s.FREQ
-    #end loop
-    #add network managers
-    for nm in nmlist:
-        new = msg.nms.add()
-        new.IP = nm[0]
-        new.PORT = nm[1]
-    #end loop
-    data_str = msg.SerializeToString()
-    return data_str 
-
-def createNMStatusMessage(sublist,counter, MYID, totalMsgs, sincelastMsgs, avgdelay, sizeOfQue):
-    msg = PyPackets_pb2.NMStatus()
-    msg.packetNum = counter
-    msg.ID = MYID.getBytes()
-    msg.time = time.time()
-    #List of the local subscribers
-    for s in sublist:
-        new = msg.subs.add()
-        new.id = s.ID
-        new.datatype = s.TYPE
-        new.port = s.PORT
-        new.address = s.IP
-        new.msgfreq = s.FREQ
-    #list of the local publishers???
-    #Size of Queue
-    msg.messagesInQue = sizeOfQue
-    msg.numberOfLocalSubscribers = len(sublist)
-    #Number of messages sent since last time
-    msg.numberOfMsgs = sincelastMsgs
-    msg.totalMsgsRecv = totalMsgs
-    #Delay between received and sent
-    msg.avgTimeDelay = avgdelay
-    data_str = msg.SerializeToString()
-    #magic
-    return data_str
 
 """
 Updates from a node (aka a process)
@@ -241,15 +193,6 @@ def calculateAvgTimeDelay(delayList):
 #Generate the ID for this Network Manager (should be loaded from arguments/file)
 id = PyPacket.PacketID(PyPacket.PacketPlatform.GROUND_CONTROL_STATION,00)
 
-#Predefine the Network Manager HeartBeat Message
-nmhb_pkt = PyPacket.PyPacket()
-nmhb_pkt.setDataType(PyPacket.PacketDataType.PKT_NETWORK_MANAGER_HEARTBEAT)
-nmhb_pkt.setID(id.getBytes())
-#Predefine the Network Status Message
-nmsm_pkt = PyPacket.PyPacket()
-nmsm_pkt.setDataType(PyPacket.PacketDataType.PKT_NETWORK_MANAGER_STATUS)
-nmsm_pkt.setID(id.getBytes())
-
 #Subscriber Lists
 SubscriberListInternal = [] #Only local subscribers of this network manager
 SubscriberListFull = [] #all subscribers in the entirity of the network
@@ -310,13 +253,11 @@ while not Quit:
             if (len(SubscriberListInternal) > 0 and len(NetworkManagerList) > 0):
                 #create the message
                 nmhb_counter += 1 #increment counter 
-                msg_str = createNMHBMessage(SubscriberListInternal,NetworkManagerList,nmhb_counter,id,MYIP,MYPORT)
-                #add this message to the packet
-                nmhb_pkt.setData(msg_str)
+                pkt_str = PyPacketTypeCheck.buildNMHeartBeat(SubscriberListInternal,NetworkManagerList,nmhb_counter,id,MYIP,MYPORT)
                 #loop through the network manager list
                 for nm in NetworkManagerList:
                     #add each NM target and message contents to the queue
-                    message_queues.put([(nm[0],nm[1]),nmhb_pkt.getPacket()])
+                    message_queues.put([(nm[0],nm[1]),pkt_str])
                 #Remove the message from packet
         
         #Is it time to send a network status message
@@ -329,16 +270,14 @@ while not Quit:
             #Get size of que
             size = message_queues.qsize()
             #Create the msg str
-            msg_str = createNMStatusMessage(SubscriberListInternal,status_counter,id,total_messages_recieved,messages_recieved,delay,size)
-            #add to the packet
-            nmsm_pkt.setData(msg_str)
+            pkt_str = createNMStatusMessage(SubscriberListInternal,status_counter,id,total_messages_recieved,messages_recieved,delay,size)
             messages_recieved = 0 #rest
             #list of subscribers whow ant this message
             for s in SubscriberListFull:
                 if s.TYPE == PyPacket.PacketDataType.PKT_NETWORK_MANAGER_STATUS:
                     if s.ID == id:
                         #add it to the que
-                        message_queues.put([s.getAddress(),nmsm_pkt.getPacket(),recvtime])
+                        message_queues.put([s.getAddress(),pkt_str,recvtime]) #TODO! This doesn't look right
             #end for loop
         #end msg generation loop
             
@@ -373,15 +312,18 @@ while not Quit:
                 message_queues = forwardPacket(newPkt,message_queues,SubscriberListFull,recvtime)
         #Handle Outputs
         for s in writable:
-            try:
-                next_msg = message_queues.get_nowait()
-            except Queue.Empty:
-                time.sleep(.01)
-            else:
-                s.sendto(next_msg[1],next_msg[0])
-                #self.logger.info("Message sent to: %s", ('localhost', self.NMPORT))
-                print'Sent Message to %s' % next_msg[0][1] #print out the port
-                time_delay.append(time.time() - next_msg[2])
+            while message_queues.qsize() > 0:
+                try:
+                    next_msg = message_queues.get_nowait()
+                except Queue.Empty:
+                    break;
+                else:
+                    s.sendto(next_msg[1],next_msg[0])
+                    #self.logger.info("Message sent to: %s", ('localhost', self.NMPORT))
+                    print'Sent Message to %s' % next_msg[0][1] #print out the port
+                    time_delay.append(time.time() - next_msg[2])
+                #End try
+            #End While
 
     except (KeyboardInterrupt, SystemExit):
         Quit = True
