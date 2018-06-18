@@ -3,8 +3,10 @@ Need a class to allow for easy generation of RF measurements based on terrain in
 '''
 
 import math
+import random
 import sys
 import assorted_lib
+import numpy as np
 
 LIGHT_SPEED = 3000000 #Approximate
 
@@ -43,31 +45,32 @@ class Terrain_RF_Model(object):
 
 class Simple_RF_Model(object):
 	
-	def __init__(self,noiseType):
+	def __init__(self,noiseType,CLLA):
 		self.noise = noiseType
+		self.CenterLLA = CLLA
 	
 	def generateMeasurement(self,transmitter_info, enu_receiver, receiver_gains):
-		TransENU = assorted_lib.LLA2ENU(transmitter_info.LLA_Pos)
+		TransENU = assorted_lib.LLA2ENU(transmitter_info.LLA_Pos, self.CenterLLA)
 		xdif = TransENU[0] - enu_receiver[0];
 		ydif = TransENU[1] - enu_receiver[1];
 		zdif = TransENU[2] - enu_receiver[2];
 		
 		distance = math.sqrt(math.pow(xdif,2) + math.pow(ydif,2) + math.pow(zdif,2))
 		
-		fspl = 20 * math.log10(distance) + 20*math.log10(transmitterInfo.frequencyGHZ) - 147.55
+		fspl = 20 * math.log10(distance) + 20*math.log10(transmitter_info.frequencyGHZ) - 147.55
 		
 		if self.noise == 0:
 			#Use random white noise
 			n = (random.random() * 10)-5 #5 to 5 dB
 		elif self.noise == 1:
 			#Use a log normal
-			n = random.lognormalvariate(0,3) #log normal distribution; parameters are hardcoded for now
+			n = np.random.lognormal(0,3,1)
 		else:
 			n = 0;
 			
 		pl = fspl + n
 		
-		ss = transmitterInfo.transmit_power + transmitterInfo.antenna_gain + Recv_Gains - pl
+		ss = transmitter_info.transmit_power + transmitter_info.antenna_gain + receiver_gains - pl
 		
 		return ss
 

@@ -20,10 +20,11 @@ message Battery{
 }
 
 message Waypoint{
-	required Vector3 LLA_Pos = 1;
-	optional float cost = 2; //for planning purposes
-	optional float costF1 = 3; //from half
-	optional float costF2 = 4; //from half
+	required Vector3 Pos = 1;
+	required stirng frame = 2; //(NED, ENU, LLA) 
+	optional float cost = 3; //for planning purposes
+	optional float costF1 = 4; //from half
+	optional float costF2 = 5; //from half
 }
 
 message Node {
@@ -123,6 +124,11 @@ message RF_Learn_Cmd{
 	required double time = 3;
 	
 	repeated string NodesToLearn = 4;
+	//We need something to say which nodes to plot 
+	required string calculateWaypointFlag = 5;
+	repeated string NodesToPlan = 6;
+	
+	optional string mode = 7; //the mode to learn is either Error or Full 
 }
 
 // -------------------------
@@ -186,7 +192,7 @@ message RF_PL_Map_Msg{
 	required double time = 3;
 	
 	required uint32 gp_iteration_number = 4; //what iteration was this
-	required uint32 xGrids = 5; //specifications of the map size 
+	required uint32 xGrids = 5; //specifications of the map size  
 	required uint32 yGrids = 6;
 	required uint32 xSpacing = 7;
 	required uint32 ySpacing = 8; 
