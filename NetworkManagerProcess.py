@@ -24,6 +24,7 @@ sys.path.insert(0, './protobuf')
 import PyPackets_pb2
 
 import PyPacket
+import PyPacketMsgBuilds
 import PyPacketTypeCheck
 import Subscriber
 
@@ -217,7 +218,9 @@ SubscriberListFull = [] #all subscribers in the entirity of the network
 
 #Network Managers
 NetworkManagerList = [] #all the IPs of the network managers
-NetworkManagerList.append(['localhost',16000]) #this should be correct
+#NetworkManagerList.append(['localhost',16000]) #this should be correct
+#This needs to be updated!! with a file or command line
+NetworkManagerList.append(['192.168.168.156',16000]) #Talon 5
 
 #Hardcoded for now
 PORT = 16000
@@ -251,7 +254,7 @@ deltaT_status = 0
 lastT_status = time.time()
 status_msg_rate = 5
 
-deltaT_nmhb = 0
+deltaT_nmhb = 11
 lastT_nmhb = time.time()
 nmhb_msg_rate = 10
 
@@ -273,6 +276,11 @@ print currentTime
 
 while not Quit:
     try:
+        #UPDATE deltaTs
+        nowtime = time.time()
+        deltaT_check = nowtime - lastT_check
+        deltaT_nmhb = nowtime - lastT_nmhb
+        #deltaT_status = nowtime - lastT_status
         #Check subscribers for inactive listeners based on previous heartbeat
         #TODO! run this at a lower frequency (like once a second or something or even less often
         if deltaT_check >= check_rate:
@@ -281,14 +289,18 @@ while not Quit:
         #Is it time to send a network heart beat message
         if deltaT_nmhb >= nmhb_msg_rate:
             #if the internal list isn't empty
+            lastT_nmhb = time.time()
             if (len(SubscriberListInternal) > 0 and len(NetworkManagerList) > 0):
                 #create the message
-                nmhb_counter += 1 #increment counter 
-                pkt_str = PyPacketTypeCheck.buildNMHeartBeat(SubscriberListInternal,NetworkManagerList,nmhb_counter,id,MYIP,MYPORT)
+                nmhb_counter += 1 #increment counter
+                #(my_id,sublist,nmlist,packet_counter,my_ip,my_port)
+                pkt_str = PyPacketMsgBuilds.buildNMHeartBeat(id,SubscriberListInternal,NetworkManagerList,nmhb_counter,MYIP,MYPORT)
                 #loop through the network manager list
                 for nm in NetworkManagerList:
                     #add each NM target and message contents to the queue
-                    message_queues.put([(nm[0],nm[1]),pkt_str])
+                    #(self.IP,self.PORT)
+                    message_queues.put([(nm[0],nm[1]),pkt_str,time.time()])
+                    print 'Sending NMHB to %s,%s'%(nm[0],nm[1])
                 #Remove the message from packet
         
         #Is it time to send a network status message

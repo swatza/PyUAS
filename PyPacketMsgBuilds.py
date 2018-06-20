@@ -95,20 +95,23 @@ def buildNMHeartBeat(my_id,sublist,nmlist,packet_counter,my_ip,my_port):
     pkt.setID(my_id.getBytes())
     # Create the message
     msg = PyPackets_pb2.NMHeartBeat()
+    msg.ID =str(my_id.getBytes())
+    msg.packetNum = packet_counter
+    msg.time = time.time()
     # add local subscribers
     for s in sublist:
         new = msg.sub.add()
-        new.id = str(s.id)
+        new.id = str(s.ID)
         new.datatype = str(s.TYPE)
-        new.port = MYPORT  # my port
-        new.address = MYIP  # my IP
+        new.port = my_port  # my port
+        new.address = my_ip  # my IP
         new.msgfreq = s.FREQ
     # end loop
     # add network managers
     for nm in nmlist:
         new = msg.nms.add()
         new.IP = nm[0]
-        new.PORT = nm[1]
+        new.PORT = str(nm[1])
     # end loop
     # Serialize and store
     data_str = msg.SerializeToString()
