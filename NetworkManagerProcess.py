@@ -218,14 +218,13 @@ SubscriberListFull = [] #all subscribers in the entirity of the network
 
 #Network Managers
 NetworkManagerList = [] #all the IPs of the network managers
-#NetworkManagerList.append(['localhost',16000]) #this should be correct
 #This needs to be updated!! with a file or command line
 NetworkManagerList.append(['192.168.168.156',16000]) #Talon 5
 
 #Hardcoded for now
 PORT = 16000
 MYPORT = PORT
-MYIP = 'localhost'
+MYIP = '192.168.168.201' #Need to get my IP address
 
 #Create my UDP Listening Socket
 manager_in_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -363,7 +362,7 @@ while not Quit:
                 else:
                     s.sendto(next_msg[1],next_msg[0])
                     #self.logger.info("Message sent to: %s", ('localhost', self.NMPORT))
-                    print'Sent Message to %s' % next_msg[0][1] #print out the port
+                    print'Sent Message to %s,%s' %(next_msg[0][0],next_msg[0][1]) #print out the port
                     time_delay.append(time.time() - next_msg[2])
                 #End try
             #End While
