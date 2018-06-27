@@ -6,6 +6,6 @@ import PyPackets_pb2
 from google.protobuf import json_format
 
 
-name = "Drifter_Test.pypl"
+name = "Aircraft_AC50_Sensing_Task_Log_001.pypl"
 myPacketLogger = PyPacketLogger.PyPacketLogger()
 myPacketLogger.openLogFile(name,True)
