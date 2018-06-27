@@ -4,6 +4,9 @@ import math
 from pymavlink import mavutil
 import numpy as np
 import logging
+import mav_command_wrappers
+
+import time
 
 class ArduPilotMissionManager(object):
     #Initialize the object by creating the connection
@@ -26,7 +29,11 @@ class ArduPilotMissionManager(object):
 
         #Get the command list from the vehicle and test
         self.commands = self.vehicle.commands
-        self.testCommands()
+        self.testCommands() #??? do we really need?
+
+        #set a mission list
+        self.missionlist = []
+
 
     def testCommands(self):
         newcmd = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, self.home[0], self.home[1], self.altitude)
@@ -48,9 +55,125 @@ class ArduPilotMissionManager(object):
             alt=cmd.z
         #END
 
+    def setCommandList(self, list):
+        #creates a command list object with commands in list
+        cmds = self.commands
+        cmds.clear()
+        for cmd in missionlist:
+            cmds.add(cmd)
+        return cmds #not really needed since its a class member
+
     def vehicleState(self):
         self.logger.info("Global Location (relative altitude): %s", self.vehicle.location.global_relative_frame)
         self.logger.info("Attitude: %s", self.vehicle.attitude)
         self.logger.info("Velocity: %s", self.vehicle.velocity)
         self.logger.info("Groundspeed: %s", self.vehicle.groundspeed)
         self.logger.info("Last Heartbeat: %s", self.vehicle.last_heartbeat)
+
+    def uploadTakeOff(self):
+        print "Creating and Uploading Takeoff Cmd"
+        missionlist = []
+        cmd_TO = Command(0,0,0,mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0, self.altitude)
+        cmd_RTL = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0, 0, self.altitude)
+        missionlist.append(cmd_TO)
+        missionlist.append(cmd_RTL)
+        self.setCommandList(missionlist)
+        self.uploadCommands()
+
+    def uploadReturnToHome(self):
+        print "Creating and Uploading RTL Cmd"
+        missionlist = []
+        cmd_RTL = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
+                          mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0, 0, self.altitude)
+        missionlist.append(cmd_RTL)
+        self.setCommandList(missionlist)
+        self.uploadCommands()
+
+    def resetMission(self):
+        self.missionlist = [] #does this work?
+
+    def addToMission(self, cmd):
+        print "Cmd added to mission list"
+        self.missionlist.append(cmd)
+
+    def getCmdinMission(self, index):
+        if index > len(self.missionlist):
+            return None
+        else:
+            return self.missionlist[index]
+
+    def setCmdinMission(self, index, cmd):
+        #Return true or false to indicate success
+        if index > len(self.missionlist):
+            print "Index can't be reached; appending to end"
+            self.addToMission(cmd)
+            return False
+        else:
+            self.missionlist[index] = cmd
+            return True
+
+    def activateMission(self):
+        self.setCommandList(self.missionlist)
+
+    def uploadCommands(self):
+        self.commands.upload()
+
+
+
+if __name__== "__main__":
+    # what does this lambda function do
+    #clear = lambda: os.system('clear')
+
+    # Parameters
+    connection_string = "udp:0.0.0.0:14550"
+    home = 40.038977,-105.232176 #Boulder airport
+    time_between_uploads = 20
+    number_of_loiters = 3
+    loiter_radius = 50
+    alt = 100
+    location1 = 40.007355,-105.262496 #Engineering building CU
+    location2 = 40.130672,-105.244495 #Table Mountain TF
+
+    print "Creating APMM"
+    #Initialize the PyUAS Ardupilot mission manager
+    apmm = ArduPilotMissionManager(connection_string, "aircraft_test", alt, home)
+
+    #Upload Takeoff and loiter at home command
+    print "TakeOff Sequence"
+    apmm.uploadTakeOff()
+
+    #upload first command of loiter X
+    print "First Command Sequence"
+    new_cmd = mav_command_wrappers.createLoiterCmd(number_of_loiters,loiter_radius,alt,location1) #create loiter command
+    apmm.addToMission(new_cmd)  #add it to the mission list
+    apmm.activateMission() #move the mission list into the command list buffer
+    apmm.uploadCommands() # upload that command list buffer to the ardupilot
+
+    #Wait N seconds
+    time.sleep(time_between_uploads) #sleep 20 s
+
+    #upload second command of loiter Y
+    print "Second Command Sequence"
+    new_cmd = mav_command_wrappers.createLoiterCmd(number_of_loiters, loiter_radius, alt,
+                                                   location2)  # create loiter command
+    apmm.addToMission(new_cmd)  # add it to the mission list
+    apmm.activateMission()  # move the mission list into the command list buffer
+    apmm.uploadCommands()  # upload that command list buffer to the ardupilot
+
+    #wait N seconds
+    time.sleep(time_between_uploads)  # sleep 20 s
+
+    #uplaod first command of loiter X
+    print "Third Command Sequence"
+    new_cmd = mav_command_wrappers.createLoiterCmd(number_of_loiters, loiter_radius, alt,
+                                                   location1)  # create loiter command
+    apmm.addToMission(new_cmd)  # add it to the mission list
+    apmm.activateMission()  # move the mission list into the command list buffer
+    apmm.uploadCommands()  # upload that command list buffer to the ardupilot
+
+    #wait N seconds
+    time.sleep(time_between_uploads)  # sleep 20 s
+
+    #return to home
+    print "Fourth Command Sequence"
+    apmm.uploadReturnToHome()
