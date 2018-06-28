@@ -18,10 +18,10 @@ location = [latitude, longitude] with 0 being current lat,lon
 def createLoiterCmd(number_of_loiters, loiter_radius, altitude, location):
     # loiter for an unlimited amount of time until next command
     if number_of_loiters == 999:
-        newcmd = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_LOITER_UNLIM, 0, 0, loiter_radius, 0,
+        newcmd = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_LOITER_UNLIM,0,0, 0, 0, loiter_radius, 0,
                          location[0], location[1], altitude)
     else:
-        newcmd = Command(0,0,0,mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_LOITER_TURNS, number_of_loiters, 0, loiter_radius, 0, location[0], location[1], altitude)
+        newcmd = Command(0,0,0,mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_LOITER_TURNS,0,0, number_of_loiters, 0, loiter_radius, 0, location[0], location[1], altitude)
     return newcmd
 
 
@@ -37,8 +37,8 @@ location = [latitude, longitude] with 0 being current lat,lon
 def createLoiterTimeCmd(time_to_loiter, loiter_radius, altitude, location):
     if time_to_loiter >= 1200:
         newcmd = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
-                         mavutil.mavlink.MAV_CMD_NAV_LOITER_UNLIM, 0, 0, loiter_radius, 0,
+                         mavutil.mavlink.MAV_CMD_NAV_LOITER_UNLIM,0,0, 0, 0, loiter_radius, 0,
                          location[0], location[1], altitude)
     else:
-        newcmd = Command(0,0,0,mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,mavutil.mavlink.MAV_CMD_NAV_LOITER_TIME,time_to_loiter,0,loiter_radius,0,location[0], location[1], altitude)
+        newcmd = Command(0,0,0,mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,mavutil.mavlink.MAV_CMD_NAV_LOITER_TIME,0,0,time_to_loiter,0,loiter_radius,0,location[0], location[1], altitude)
     return newcmd

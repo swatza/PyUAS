@@ -59,7 +59,7 @@ class ArduPilotMissionManager(object):
         #creates a command list object with commands in list
         cmds = self.commands
         cmds.clear()
-        for cmd in missionlist:
+        for cmd in list:
             cmds.add(cmd)
         return cmds #not really needed since its a class member
 
@@ -118,6 +118,13 @@ class ArduPilotMissionManager(object):
     def uploadCommands(self):
         self.commands.upload()
 
+    def goToAuto(self):
+        pass
+
+    def JumpTo(self, waypoint_ind):
+        return Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_JUMP, 0, 0, waypoint_ind,
+                -1, 0, 0, 0, 0, 0)
+
 
 
 if __name__== "__main__":
@@ -125,14 +132,15 @@ if __name__== "__main__":
     #clear = lambda: os.system('clear')
 
     # Parameters
-    connection_string = "udp:0.0.0.0:14550"
+    connection_string = "udp:0.0.0.0:14552"
     home = 40.038977,-105.232176 #Boulder airport
-    time_between_uploads = 20
+    time_between_uploads = 30
     number_of_loiters = 3
     loiter_radius = 50
     alt = 100
     location1 = 40.007355,-105.262496 #Engineering building CU
     location2 = 40.130672,-105.244495 #Table Mountain TF
+    my_wpt_counter = 0
 
     print "Creating APMM"
     #Initialize the PyUAS Ardupilot mission manager
@@ -141,6 +149,7 @@ if __name__== "__main__":
     #Upload Takeoff and loiter at home command
     print "TakeOff Sequence"
     apmm.uploadTakeOff()
+    time.sleep(time_between_uploads) #sleep 20 s
 
     #upload first command of loiter X
     print "First Command Sequence"
@@ -148,6 +157,8 @@ if __name__== "__main__":
     apmm.addToMission(new_cmd)  #add it to the mission list
     apmm.activateMission() #move the mission list into the command list buffer
     apmm.uploadCommands() # upload that command list buffer to the ardupilot
+    apmm.goToAuto()
+    my_wpt_counter += 1 #increment my wpt counter by 1
 
     #Wait N seconds
     time.sleep(time_between_uploads) #sleep 20 s
@@ -159,6 +170,9 @@ if __name__== "__main__":
     apmm.addToMission(new_cmd)  # add it to the mission list
     apmm.activateMission()  # move the mission list into the command list buffer
     apmm.uploadCommands()  # upload that command list buffer to the ardupilot
+    apmm.JumpTo(my_wpt_counter)
+    #TODO! Doesn't seem to properly upload the messages. My suggestion is to either A: Jump command or B: RTL then back to auto
+    #This would mean continually adding missions and just having a counter.
 
     #wait N seconds
     time.sleep(time_between_uploads)  # sleep 20 s
