@@ -122,14 +122,18 @@ class ArduPilotMissionManager(object):
         pass
 
     def JumpTo(self, waypoint_ind):
-        return Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_JUMP, 0, 0, waypoint_ind,
+        cmd_list = []
+        new_cmd = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_JUMP, 0, 0, waypoint_ind,
                 -1, 0, 0, 0, 0, 0)
+        cmd_list.append(new_cmd)
+        self.setCommandList(cmd_list)
+        self.uploadCommands()
 
 
 
 if __name__== "__main__":
     # what does this lambda function do
-    #clear = lambda: os.system('clear')
+    clear = lambda: os.system('clear')
 
     # Parameters
     connection_string = "udp:0.0.0.0:14552"
@@ -148,7 +152,7 @@ if __name__== "__main__":
 
     #Upload Takeoff and loiter at home command
     print "TakeOff Sequence"
-    apmm.uploadTakeOff()
+    #apmm.uploadTakeOff()
     time.sleep(time_between_uploads) #sleep 20 s
 
     #upload first command of loiter X
@@ -170,7 +174,9 @@ if __name__== "__main__":
     apmm.addToMission(new_cmd)  # add it to the mission list
     apmm.activateMission()  # move the mission list into the command list buffer
     apmm.uploadCommands()  # upload that command list buffer to the ardupilot
+    my_wpt_counter += 1
     apmm.JumpTo(my_wpt_counter)
+
     #TODO! Doesn't seem to properly upload the messages. My suggestion is to either A: Jump command or B: RTL then back to auto
     #This would mean continually adding missions and just having a counter.
 
