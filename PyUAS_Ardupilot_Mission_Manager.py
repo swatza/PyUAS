@@ -19,7 +19,7 @@ class ArduPilotMissionManager(object):
         self.logger.info("Connecting to vehicle on: %s",connection)
 
         #connect to the vehicle
-        self.vehicle = connect(connection,baud=57600,  _initialize=True, wait_ready=True)
+        self.vehicle = connect(connection,baud=57600, _initialize=True, wait_ready=None)
 
         #check to see if connection was established?
 
