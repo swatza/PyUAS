@@ -131,15 +131,9 @@ class ArduPilotMissionManager(object):
     def goToGuided(self):
         self.vehicle.mode = VehicleMode("GUIDED")
 
-    ''' Old Version??
-    def JumpTo(self, waypoint_ind):
-        cmd_list = []
-        new_cmd = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_JUMP, 0, 0, waypoint_ind,
-                -1, 0, 0, 0, 0, 0)
-        cmd_list.append(new_cmd)
-        self.setCommandList(cmd_list)
-        self.uploadCommands()
-    '''
+    def goToRTL(self):
+        self.vehicle.mode = VehicleMode("RTL") #or is it ReturnToLaunch
+
     #Number of times if set to -1 is indefinite repeat until it moves to next command in the list
     def JumpTo(self, waypoint_ind, number_of_times):
         return Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_JUMP, 0, 0, waypoint_ind,
@@ -152,14 +146,14 @@ if __name__== "__main__":
     clear = lambda: os.system('clear')
 
     # Parameters
-    connection_string = "udp:127.0.0.1:14552"
-    home = 40.038977,-105.232176 #Boulder airport
+    connection_string = "udp:127.0.0.1:14552" #Update this for actual aircraft test flight
+    home = 40.038977,-105.232176 #UPdate Me
     time_between_uploads = 30
     number_of_loiters = 3
     loiter_radius = 50
-    alt = 100
-    location1 = 40.007355,-105.262496 #Engineering building CU
-    location2 = 40.130672,-105.244495 #Table Mountain TF
+    alt = 100 #this feet or meters?
+    location1 = 40.007355,-105.262496 #Update Me
+    location2 = 40.130672,-105.244495 #Update Me
     my_wpt_counter = 0
 
     print "Creating APMM"
@@ -173,46 +167,45 @@ if __name__== "__main__":
     #time.sleep(time_between_uploads) #sleep 20 s
 
     #upload first command of loiter X
-    print "First Command Sequence"
+    print "First Command Sequence: Head to Location 1"
     new_cmd = mav_command_wrappers.createLoiterCmd(number_of_loiters,loiter_radius,alt,location1) #create loiter command
-    apmm.resetMission() #reset the mission here
+    apmm.resetMission() #reset the mission list here
     apmm.addToMission(new_cmd)  #add it to the mission list
     apmm.activateMission() #move the mission list into the command list buffer
     apmm.uploadCommands() # upload that command list buffer to the ardupilot
-    apmm.goToAuto()
-    my_wpt_counter += 1 #increment my wpt counter by 1
+    apmm.goToAuto() #I can do this or he can...
 
     #Wait N seconds
     time.sleep(time_between_uploads) #sleep 20 s
 
     #upload second command of loiter Y
-    print "Second Command Sequence"
-    new_cmd = mav_command_wrappers.createLoiterCmd(number_of_loiters, loiter_radius, alt,
+    print "Second Command Sequence: Head to Location 2 -> timer"
+    new_cmd = mav_command_wrappers.createLoiterTimeCmd(300, loiter_radius, alt,
                                                    location2)  # create loiter command
-    apmm.goToGuided() #Pause mission by going to guided #CONFIRMED WORKING
-    #also try doing a vehicle.commands.next = nextwaypoint
+    apmm.goToGuided() #Pause mission by going to guided
     apmm.resetMission()
     apmm.addToMission(new_cmd)  # add it to the mission list
     apmm.activateMission()  # move the mission list into the command list buffer
     apmm.uploadCommands()  # upload that command list buffer to the ardupilot
-    apmm.goToAuto() #restart
-    my_wpt_counter += 1 #2 added
+    apmm.goToAuto() #restart the mission (goes to mission 1)
 
     #wait N seconds
     time.sleep(time_between_uploads)  # sleep 20 s
 
     #uplaod first command of loiter X
-    print "Third Command Sequence"
+    print "Third Command Sequence: Head to Location 1"
     new_cmd = mav_command_wrappers.createLoiterCmd(number_of_loiters, loiter_radius, alt,
                                                    location1)  # create loiter command
+    apmm.goToGuided()  # Pause mission by going to guided
+    apmm.resetMission()
     apmm.addToMission(new_cmd)  # add it to the mission list
     apmm.activateMission()  # move the mission list into the command list buffer
-    apmm.vehicle.next = 2 #set to the second command (see if this works)
     apmm.uploadCommands()  # upload that command list buffer to the ardupilot
     apmm.goToAuto()
+
     #wait N seconds
     time.sleep(time_between_uploads)  # sleep 20 s
 
     #return to home
-    print "Fourth Command Sequence"
-    apmm.uploadReturnToHome()
+    print "Fourth Command Sequence: Return To Launch"
+    apmm.goToRTL()

@@ -21,7 +21,7 @@ message Battery{
 
 message Waypoint{
 	required Vector3 Pos = 1;
-	required stirng frame = 2; //(NED, ENU, LLA) 
+	required string frame = 2; //(NED, ENU, LLA) 
 	optional float cost = 3; //for planning purposes
 	optional float costF1 = 4; //from half
 	optional float costF2 = 5; //from half
@@ -162,6 +162,7 @@ message RFNode{
 	required float pl_error = 4; //PL error between predicted and measured
 	optional uint32 xgridNum = 5; //x grid number in the prediction field
 	optional uint32 ygridNum = 6; //y grid number in the prediction field
+	optional float rssi2 = 7; //Second channel for RF measurements 
 }
 
 message RFMapGrid{
