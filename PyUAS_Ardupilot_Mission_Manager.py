@@ -115,15 +115,23 @@ class ArduPilotMissionManager(object):
     def activateMission(self):
         self.setCommandList(self.missionlist)
 
+    def getCommands(self):
+        self.commands.download()
+        self.commands.wait_ready() #wait until download is complete
+
+    def getNextWaypoint(self):
+        pass #something with .next
+
     def uploadCommands(self):
         self.commands.upload()
 
     def goToAuto(self):
-        pass
+        self.vehicle.mode = VehicleMode("AUTO")
 
-    def JumpTo(self, waypoint_ind):
+    #Number of times if set to -1 is indefinite repeat until it moves to next command in the list
+    def JumpTo(self, waypoint_ind, number_of_times):
         return Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_JUMP, 0, 0, waypoint_ind,
-                -1, 0, 0, 0, 0, 0)
+                number_of_times, 0, 0, 0, 0, 0)
 
 
 
@@ -148,12 +156,13 @@ if __name__== "__main__":
 
     #Upload Takeoff and loiter at home command
     print "TakeOff Sequence"
-    apmm.uploadTakeOff()
+    apmm.uploadTakeOff() #add take off and RTL
     time.sleep(time_between_uploads) #sleep 20 s
 
     #upload first command of loiter X
     print "First Command Sequence"
     new_cmd = mav_command_wrappers.createLoiterCmd(number_of_loiters,loiter_radius,alt,location1) #create loiter command
+    apmm.resetMission() #reset the mission here
     apmm.addToMission(new_cmd)  #add it to the mission list
     apmm.activateMission() #move the mission list into the command list buffer
     apmm.uploadCommands() # upload that command list buffer to the ardupilot
@@ -170,7 +179,7 @@ if __name__== "__main__":
     apmm.addToMission(new_cmd)  # add it to the mission list
     apmm.activateMission()  # move the mission list into the command list buffer
     apmm.uploadCommands()  # upload that command list buffer to the ardupilot
-    apmm.JumpTo(my_wpt_counter)
+    apmm.JumpTo(my_wpt_counter,2)
     #TODO! Doesn't seem to properly upload the messages. My suggestion is to either A: Jump command or B: RTL then back to auto
     #This would mean continually adding missions and just having a counter.
 
