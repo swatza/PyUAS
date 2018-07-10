@@ -91,9 +91,10 @@ class PyPacketLogger():
             infile.seek(0, os.SEEK_END)
             length_of_file = infile.tell()
             #print length_of_file
-            while seekbyte != length_of_file:
+            while (seekbyte+12) < length_of_file: #make sure there is atleast 12 bytes to read in the header?
                 #print seekbyte
-                seekbyte = self.readPacketFromLog(infile, seekbyte)
+                seekbyte = self.readPacketFromLog(infile, seekbyte) #Problem if the file isn't equal or something?
+                #print "Read in packet from log"
         # We have finished reading in all the data
         if output_to_json_flag:
             # change the output to .json
@@ -115,13 +116,14 @@ class PyPacketLogger():
                 # Parse to json
                 json_string = json_format.MessageToJson(msg)
                 outfile.write(json_string + "\n")
-                print 'wrote packet %i to file' % i
+                #print 'wrote packet %i to json file' % i
             # end for loop
+            print "Wrote %i Packets to json file" %i
         # End open
 
     def readPacketFromLog(self, readfile, location):
         # with an open file, read x bytes
-        readfile.seek(location)
+        readfile.seek(location) #check the number of bytes left to read?
         # first read the 8 bytes for timestamp
         inBytes = readfile.read(8)
         #print len(inBytes)
