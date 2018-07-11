@@ -65,14 +65,20 @@ class PyPacketLogger():
     def writePacketToLog(self, pypkt):
         # get the time stamp for log
         ts = time.time()
+        startByte = 0xAA
+        EndByte = 0xFF
+        sb = struct.pack('<b',startByte)
+        eb = struct.pack('<b',endByte)
         ts_str = struct.pack('<d', ts)  # little endian
         size = pypkt.getPacketSize()
         size_str = struct.pack('<L', size)
         # open binary file in append mode
         with open(self.logname, 'ab', 0) as outfile:
+            outfile.write(sb)
             outfile.write(ts_str)  # write the time stamp
             outfile.write(size_str)  # write out the size of the data message (so we know where it ends)
             outfile.write(pypkt.getPacket())  # Write the data
+            outfile.write(eb)
             outfile.flush()  # force the write to happen
             # COULD LOG SOMETHING?
             return True  # error return that is was successful
@@ -91,7 +97,7 @@ class PyPacketLogger():
             infile.seek(0, os.SEEK_END)
             length_of_file = infile.tell()
             #print length_of_file
-            while (seekbyte+12) < length_of_file: #make sure there is atleast 12 bytes to read in the header?
+            while (seekbyte+14) < length_of_file: #make sure there is atleast 14 bytes in the header
                 #print seekbyte
                 seekbyte = self.readPacketFromLog(infile, seekbyte) #Problem if the file isn't equal or something?
                 #print "Read in packet from log"
@@ -124,6 +130,12 @@ class PyPacketLogger():
     def readPacketFromLog(self, readfile, location):
         # with an open file, read x bytes
         readfile.seek(location) #check the number of bytes left to read?
+        inBytes = readfile.read(1)
+        if struct.unpack('<b',inbytes)[0] == 0xAA:
+            #start of the sequence; else we are miss aligned
+            print "Packets are Aligned"
+        else:
+            print "Misaligned Packets"
         # first read the 8 bytes for timestamp
         inBytes = readfile.read(8)
         #print len(inBytes)
@@ -140,7 +152,8 @@ class PyPacketLogger():
         # add to the packet buffer
         self.packetbuffer.addtolist(self.pypacket, ts)
         # calculate new location
-        newlocation = location + 4 + 8 + dsize
+        inBytes = readfile.read(1) #read teh last byte
+        newlocation = location + 4 + 8 + dsize + 2 #plus the header bytes
         return newlocation
 
     def getPacketBufferFromLog(self):
