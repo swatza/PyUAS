@@ -163,6 +163,8 @@ message RFNode{
 	optional uint32 xgridNum = 5; //x grid number in the prediction field
 	optional uint32 ygridNum = 6; //y grid number in the prediction field
 	optional float rssi2 = 7; //Second channel for RF measurements 
+	optional float rssiRaw = 8; //raw output from wahtever the sensor is
+	optional float rssiRaw2 = 9; // raw output from whatever the sensor is 
 }
 
 message RFMapGrid{
