@@ -5,6 +5,7 @@ import os
 import logging
 import sys
 import array
+import json
 
 sys.path.insert(0, './protobuf')
 import PyPacket
@@ -67,8 +68,8 @@ class PyPacketLogger():
         ts = time.time()
         startByte = 0xAA
         EndByte = 0xFF
-        sb = struct.pack('<b',startByte)
-        eb = struct.pack('<b',endByte)
+        sb = struct.pack('b',startByte)
+        eb = struct.pack('b',endByte)
         ts_str = struct.pack('<d', ts)  # little endian
         size = pypkt.getPacketSize()
         size_str = struct.pack('<L', size)
@@ -80,7 +81,7 @@ class PyPacketLogger():
             outfile.write(pypkt.getPacket())  # Write the data
             outfile.write(eb)
             outfile.flush()  # force the write to happen
-            # COULD LOG SOMETHING?
+            # COULD LOG SOMETHING
             return True  # error return that is was successful
         # Could log something
         return False  # error return that it failed to write
@@ -89,7 +90,6 @@ class PyPacketLogger():
         if name:
             self.logname = name
 
-        self.pypacket = PyPacket.PyPacket()
         # open as binary for reading
         seekbyte = 0
         with open(self.logname, 'rb') as infile:
@@ -103,6 +103,7 @@ class PyPacketLogger():
                 #print "Read in packet from log"
         # We have finished reading in all the data
         if output_to_json_flag:
+            print "Length is: %i" %self.packetbuffer.length
             # change the output to .json
             shortname = self.logname.split(".")[0]
             shortname = shortname + ".json"
@@ -120,8 +121,10 @@ class PyPacketLogger():
                 # parse to google message
                 msg.ParseFromString(thispacket.getData())
                 # Parse to json
-                json_string = json_format.MessageToJson(msg)
-                outfile.write(json_string + "\n")
+                json_obj = json_format.MessageToJson(msg)
+                obj = json.loads(json_obj)
+                json_string = json.dumps(obj) + '\n'
+                outfile.write(json_string)
                 #print 'wrote packet %i to json file' % i
             # end for loop
             print "Wrote %i Packets to json file" %i
@@ -130,12 +133,12 @@ class PyPacketLogger():
     def readPacketFromLog(self, readfile, location):
         # with an open file, read x bytes
         readfile.seek(location) #check the number of bytes left to read?
-        inBytes = readfile.read(1)
-        if struct.unpack('<b',inbytes)[0] == 0xAA:
-            #start of the sequence; else we are miss aligned
-            print "Packets are Aligned"
-        else:
-            print "Misaligned Packets"
+        #inBytes = readfile.read(1)
+        #if struct.unpack('<b',inBytes)[0] == 0xAA:
+        #    #start of the sequence; else we are miss aligned
+        #    print "Packets are Aligned"
+        #else:
+        #    print "Misaligned Packets"
         # first read the 8 bytes for timestamp
         inBytes = readfile.read(8)
         #print len(inBytes)
@@ -148,12 +151,13 @@ class PyPacketLogger():
         # read the data & create packet
         inBytes = readfile.read(dsize)
         #print len(inBytes)
-        self.pypacket.setPacket(inBytes)
+        pkt = PyPacket.PyPacket()
+        pkt.setPacket(inBytes)
         # add to the packet buffer
-        self.packetbuffer.addtolist(self.pypacket, ts)
+        self.packetbuffer.addtolist(pkt, ts)
         # calculate new location
-        inBytes = readfile.read(1) #read teh last byte
-        newlocation = location + 4 + 8 + dsize + 2 #plus the header bytes
+        # inBytes = readfile.read(1) #read teh last byte
+        newlocation = location + 4 + 8 + dsize #plus the header bytes
         return newlocation
 
     def getPacketBufferFromLog(self):
