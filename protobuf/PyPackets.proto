@@ -93,6 +93,8 @@ message dummy_msg{
 	required string ID = 2;
 	required double time = 3;
 	required string s = 4;
+	optional string s2 = 5;
+	optional string s3 = 6;
 }
 
 // -------------------------
