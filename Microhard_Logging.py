@@ -116,8 +116,12 @@ if __name__ == "__main__":
     #Microhard string
     mh_str = "http://192.168.168.150/cgi-bin/webif/getradio.sh" #Make sure 192.168.168.1## matches aircraft number
 
+    log_level = 10 #debug
+    #My id
+    my_id = PyPacket.PacketID(PyPacket.PacketPlatform.DUMMY,0)
+
     #start the microhard logging thread
-    mhlogging = MicroHardLogging()
+    mhlogging = MicroHardLogging(mh_str,my_id,log_level)
     mhlogging.start()
 
     while threading.active_count() > 1:
