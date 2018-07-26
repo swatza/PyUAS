@@ -6,6 +6,6 @@ import PyPackets_pb2
 from google.protobuf import json_format
 
 
-name = "AC50_Sensing_001.pypl"
+name = "Mission_2.pypl"
 myPacketLogger = PyPacketLogger.PyPacketLogger()
 myPacketLogger.openLogFile(name,True)
